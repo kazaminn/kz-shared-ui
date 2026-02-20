@@ -1,1 +1,2 @@
+echo "[husky] commit-msg: running commitlint"
 npx --no -- commitlint --edit "$1"

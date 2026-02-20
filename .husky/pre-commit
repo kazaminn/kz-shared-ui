@@ -1,1 +1,6 @@
+if [ "$HUSKY_PRE_COMMIT" != "1" ]; then
+  echo "[husky] pre-commit: skipped"
+  exit 0
+fi
+echo "[husky] pre-commit: running lint-staged"
 lint-staged --concurrent false

@@ -7,7 +7,7 @@
   /* Surfaces */
   --background-color-base: theme(colors.white);
   --background-color-surface: theme(colors.gray.50);
-  --border-color-main: theme(colors.gray.200);
+  --border-color-main: theme(colors.gray.300);
 
   /* Text */
   --text-color-body: theme(colors.gray.900);
@@ -101,7 +101,7 @@
 [data-theme='dark'] {
   --background-color-base: theme(colors.gray.950);
   --background-color-surface: theme(colors.gray.900);
-  --border-color-main: theme(colors.gray.800);
+  --border-color-main: theme(colors.gray.500);
 
   --text-color-body: theme(colors.gray.100);
   --text-color-muted: theme(colors.gray.400);

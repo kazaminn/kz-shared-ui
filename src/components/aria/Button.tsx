@@ -10,18 +10,21 @@ const buttonVariants = tv({
     'rounded-md font-medium',
     'transition-colors duration-150',
     'outline-none',
+    'cursor-pointer',
     'focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2',
     'disabled:pointer-events-none disabled:opacity-50',
     'select-none',
   ],
   variants: {
     variant: {
-      primary: 'bg-primary text-primary-foreground pressed:bg-primary-hover',
+      primary:
+        'bg-primary text-primary-foreground hover:bg-primary-hover pressed:bg-primary-hover',
       secondary:
-        'bg-secondary text-secondary-foreground pressed:bg-secondary-hover',
-      outline: 'hovered:bg-surface border border-main bg-transparent text-body',
-      destructive: 'bg-danger text-danger-foreground pressed:bg-danger-hover',
-      link: 'hovered:text-link-hover bg-transparent text-link underline-offset-4 pressed:text-link-active',
+        'bg-secondary text-secondary-foreground hover:bg-secondary-hover pressed:bg-secondary-hover',
+      outline: 'border border-main bg-transparent text-body hover:bg-surface',
+      destructive:
+        'bg-danger text-danger-foreground hover:bg-danger-hover pressed:bg-danger-hover',
+      link: 'bg-transparent text-link underline-offset-4 hover:text-link-hover pressed:text-link-active',
     },
     size: {
       sm: 'h-8 px-3 text-sm',

@@ -163,11 +163,11 @@ npm run commit:ai -- -m "メッセージ"
 `vitest-axe` はメンテナンス頻度が低いため不使用。`axe-core` を直接使う。
 
 ```ts
-import { axe } from 'axe-core';
+import axe from 'axe-core';
 import { render } from '@testing-library/react';
 
 const { container } = render(<Button>送信</Button>);
-const results = await axe(container);
+const results = await axe.run(container);
 expect(results.violations).toHaveLength(0);
 ```
 
@@ -310,8 +310,11 @@ Tailwind v4 の `@theme` で自動的にユーティリティクラスが生成�
 **実装例: Button**
 
 ```tsx
-import { Button as AriaButton, type ButtonProps as AriaButtonProps } from 'react-aria-components';
-import { tv, type VariantProps } from '@/lib/tv';
+import {
+  Button as AriaButton,
+  type ButtonProps as AriaButtonProps,
+} from 'react-aria-components';
+import { type VariantProps, tv } from '@/lib/tv';
 
 const buttonVariants = tv({
   base: [
@@ -319,17 +322,21 @@ const buttonVariants = tv({
     'rounded-md font-medium',
     'transition-colors duration-150',
     'outline-none',
+    'cursor-pointer',
     'focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2',
     'disabled:pointer-events-none disabled:opacity-50',
     'select-none',
   ],
   variants: {
     variant: {
-      primary: 'bg-primary text-primary-foreground pressed:bg-primary-hover',
-      secondary: 'bg-secondary text-secondary-foreground pressed:bg-secondary-hover',
-      outline: 'hovered:bg-surface border border-main bg-transparent text-body',
-      destructive: 'bg-danger text-danger-foreground pressed:bg-danger-hover',
-      link: 'hovered:text-link-hover bg-transparent text-link underline-offset-4 pressed:text-link-active',
+      primary:
+        'bg-primary text-primary-foreground hover:bg-primary-hover pressed:bg-primary-hover',
+      secondary:
+        'bg-secondary text-secondary-foreground hover:bg-secondary-hover pressed:bg-secondary-hover',
+      outline: 'border border-main bg-transparent text-body hover:bg-surface',
+      destructive:
+        'bg-danger text-danger-foreground hover:bg-danger-hover pressed:bg-danger-hover',
+      link: 'bg-transparent text-link underline-offset-4 hover:text-link-hover pressed:text-link-active',
     },
     size: {
       sm: 'h-8 px-3 text-sm',
@@ -343,18 +350,31 @@ const buttonVariants = tv({
   },
 });
 
-export type ButtonProps = AriaButtonProps & VariantProps<typeof buttonVariants> & {
-  className?: string;
+export type ButtonProps = AriaButtonProps &
+  VariantProps<typeof buttonVariants> & {
+    className?: string;
+  };
+
+export const Button: React.FC<ButtonProps> = ({
+  variant,
+  size,
+  className,
+  ...props
+}: ButtonProps) => {
+  return (
+    <AriaButton
+      className={buttonVariants({ variant, size, className })}
+      {...props}
+    />
+  );
 };
 
-export const Button = ({ variant, size, className, ...props }: ButtonProps) => {
-  return <AriaButton className={buttonVariants({ variant, size, className })} {...props} />;
-};
 ```
 
 **重要なポイント:**
 
-1. **状態セレクタ:** `tailwindcss-react-aria-components` プラグインを使用しているため、`focus-visible:`、`hovered:`、`pressed:`、`disabled:` が使える
+1. **状態セレクタ:** `tailwindcss-react-aria-components` プラグインを使用しているため、`focus-visible:`、`pressed:`、`disabled:` が使える
+   - `hovered:` セレクタは使わない。`hover:`を使う。（公式ドキュメント準拠）
 2. **フォーカスリング:** `focus-visible:ring-focus-ring` と書く（`ring-[--color-focus-ring]` ではない）
 3. **outline-none:** base に含めてブラウザデフォルトのアウトラインを消す
 4. **Props 型:** `AriaButtonProps` + `VariantProps` + `{ className?: string }` の交差型
@@ -415,57 +435,91 @@ import { TextField, Label, Input, Text } from 'react-aria-components';
 
 ### components/aria（wrapper）
 
-react-aria-components 側でテスト済みなので、**意図したクラス名が使われているか**の確認に留める。実質的な品質保証は Playwright に任せる。
+`react-aria-components` をラップする薄いレイヤーと位置付ける。
+アクセシビリティ挙動は react-aria 側で保証されているため、ラッパーでは再テストしない。
 
-`describe` は対象コンポーネント名の 1 段のみ。それ以上ネストしない。`it` の説明文は英語で書く。
+Unit テストでは以下のみを確認する：
 
-ariaラッパーのテストでロジックの動作確認が必要な場合（Toastのシェアボタン等）、簡易的なダミーロジックをテスト内に実装してよい。
+- 正しくレンダリングされること（role / accessible name）
+- 指定した `variant` / `size` に対応するクラスが適用されていること
+- `defaultVariants` が機能していること
+- `isDisabled` などの主要 Props が正しく反映されること
+- axe-core による violations が 0 であること
+
+`className` のマージやバリアント解決ロジックの詳細は `@/lib/tv` の責務とし、aria wrapper 側では再テストしない。
+
+視覚的な正しさ（色、コントラスト、テーマ差分など）は unit では検証しない。
+実ブラウザでの視覚保証は Playwright に委ねる。
+
+テスト構造のルール：
+
+- `describe` は対象コンポーネント名の 1 段のみ
+- ネストは禁止
+- `it` の説明文は英語
+- `getByRole` を優先
+
+aria ラッパー内で最小限のロジックを持つ場合のみ、そのロジック部分を簡易的にテストしてよい。ただし状態管理や複雑な振る舞いは責務外とする。
+
+`userEvent.setup()` はファイル先頭ではなく各 `it` ブロック内で呼ぶこと、
 
 ```tsx
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
+import axe from 'axe-core';
+import { describe, expect, it, vi } from 'vitest';
 import { Button } from './Button';
 
 describe('Button', () => {
-  it('renders children', () => {
-    render(<Button>送信</Button>);
-    expect(screen.getByRole('button', { name: '送信' })).toBeInTheDocument();
+  it('renders as button with accessible name', () => {
+    render(<Button>Submit</Button>);
+    expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
   });
 
-  it('applies variant="primary" classes', () => {
-    render(<Button variant="primary">Primary</Button>);
-    expect(screen.getByRole('button')).toHaveClass('bg-primary', 'text-primary-foreground');
+  it('applies default variant and size classes', () => {
+    render(<Button>Default</Button>);
+    const button = screen.getByRole('button');
+
+    // defaultVariants: variant="primary", size="md"
+    expect(button).toHaveClass('bg-primary');
+    expect(button).toHaveClass('h-10');
   });
 
   it('applies variant="secondary" classes', () => {
     render(<Button variant="secondary">Secondary</Button>);
-    expect(screen.getByRole('button')).toHaveClass('bg-secondary', 'text-secondary-foreground');
+    expect(screen.getByRole('button')).toHaveClass(
+      'bg-secondary',
+      'text-secondary-foreground'
+    );
   });
 
   it('applies variant="outline" classes', () => {
     render(<Button variant="outline">Outline</Button>);
-    expect(screen.getByRole('button')).toHaveClass('border', 'border-main', 'bg-transparent');
+    expect(screen.getByRole('button')).toHaveClass(
+      'border',
+      'border-main',
+      'bg-transparent'
+    );
   });
 
   it('applies variant="destructive" classes', () => {
     render(<Button variant="destructive">Destructive</Button>);
-    expect(screen.getByRole('button')).toHaveClass('bg-danger', 'text-danger-foreground');
+    expect(screen.getByRole('button')).toHaveClass(
+      'bg-danger',
+      'text-danger-foreground'
+    );
   });
 
   it('applies variant="link" classes', () => {
     render(<Button variant="link">Link</Button>);
-    expect(screen.getByRole('button')).toHaveClass('text-link', 'underline-offset-4');
+    expect(screen.getByRole('button')).toHaveClass(
+      'text-link',
+      'underline-offset-4'
+    );
   });
 
   it('applies size="sm" classes', () => {
     render(<Button size="sm">Small</Button>);
     expect(screen.getByRole('button')).toHaveClass('h-8', 'px-3', 'text-sm');
-  });
-
-  it('applies size="md" classes', () => {
-    render(<Button size="md">Medium</Button>);
-    expect(screen.getByRole('button')).toHaveClass('h-10', 'px-4', 'text-base');
   });
 
   it('applies size="lg" classes', () => {
@@ -474,22 +528,31 @@ describe('Button', () => {
   });
 
   it('is disabled when isDisabled is true', () => {
-    render(<Button isDisabled>Submit</Button>);
+    render(<Button isDisabled>Disabled</Button>);
     expect(screen.getByRole('button')).toBeDisabled();
   });
 
   it('calls onPress when clicked', async () => {
     const onPress = vi.fn();
     render(<Button onPress={onPress}>Submit</Button>);
+
     await userEvent.click(screen.getByRole('button'));
+
     expect(onPress).toHaveBeenCalledOnce();
   });
 
   it('merges custom className without overriding default variant', () => {
     render(<Button className="custom-class">Custom</Button>);
     const button = screen.getByRole('button');
+
     expect(button).toHaveClass('custom-class');
     expect(button).toHaveClass('bg-primary');
+  });
+
+  it('has no accessibility violations', async () => {
+    const { container } = render(<Button>Submit</Button>);
+    const results = await axe.run(container);
+    expect(results.violations).toHaveLength(0);
   });
 });
 ```
@@ -502,13 +565,19 @@ describe('Button', () => {
 
 ### components/ui（自作）
 
-フルテスト必要:
+react-aria-components に依存しない独自実装のコンポーネント群。これらは kz-shared-ui 側が挙動とアクセシビリティの責任を持つ。
 
-- レンダリング
-- バリアント・サイズのクラス確認
-- インタラクション（click / keyboard / disabled）
-- アクセシビリティ（axe-core / ARIA 属性）
-- Playwright での実ブラウザ確認
+Unit テストでは以下を網羅的に確認する：
+
+- 正しくレンダリングされること
+- セマンティックな role / ARIA 属性が適切であること
+- バリアントやサイズが正しく反映されること
+- インタラクション（click / keyboard）が期待通り動作すること
+- disabled / readOnly などの状態が正しく機能すること
+- 必要に応じて状態遷移が正しく行われること
+- axe-core による violations が 0 であること
+
+※ 複雑な状態管理や UI 遷移を持つ場合は、状態の変化が DOM 上で観測可能であることを検証する。
 
 ## Storybook
 
@@ -528,19 +597,11 @@ describe('Button', () => {
 1. GitHub issue を作成
 2. 作業ブランチを作成
 3. 実装
-4. テストが通ることを確認
-   pnpm test
+4. ユニットテストが通ることを確認
+   npm run test
 5. PR を作成
    gh pr create --title "feat: XXX" --body "closes #N"
 6. レビュー後にマージ
-```
-
-**node_modules の扱い:**
-
-worktree 作成後、`node_modules` をシンボリックリンクにすることでディスク消費を抑えられる。依存を変えるissueは並列にしないこと。
-
-```bash
-ln -s ../kz-shared-ui/node_modules ../kz-shared-ui-feature-issueN/node_modules
 ```
 
 ## ブランチ命名規則
@@ -593,15 +654,14 @@ MyYomuMoji で必要なものを優先する。
 
 **components/aria（wrapper）**
 
-1. Button
-2. Input（TextField + Label + Text のセット）
-3. Switch
-4. Select
-5. Slider
-6. ColorSwatch
-7. ColorPicker
-8. Tabs
-9. Toast
+1. Input（TextField + Label + Text のセット）
+2. Switch
+3. Select
+4. Slider
+5. ColorSwatch
+6. ColorPicker
+7. Tabs
+8. Toast
 
 **components/ui（自作）**
 
@@ -625,17 +685,9 @@ kz-shared-ui の Button と Toast を使い、MyYomuMoji 側でロジックを�
 
 `focus-visible:ring-[--color-focus-ring]` ではなく `focus-visible:ring-focus-ring` を使う。
 
-### hover が効かない
-
-`hover:` ではなく `hovered:` を使う（tailwindcss-react-aria-components プラグイン）。
-
 ### クラスが生成されない
 
 トークン名が `--color-*` になっていないか確認。`--background-color-*` / `--text-color-*` / `--border-color-*` を使う。ただし `ring` カラーは例外（上記トークン命名規則を参照）。
-
-### `@testing-library/jest-dom` の型が効かない
-
-`vitest.shims.d.ts` はプロジェクトルートではなく `src/test/` に置く。`tsconfig.app.json` の `include` に `src` が含まれていれば自動的に拾われる。
 
 ### `react-hooks/exhaustive-deps` の修正をAIに依頼する場合
 

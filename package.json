@@ -13,7 +13,8 @@
     "prepare": "husky",
     "commit:ai": "cross-env HUSKY_PRE_COMMIT=1 git commit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "chromatic": "chromatic"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -44,6 +45,7 @@
     "@eslint/js": "^9.39.2",
     "@storybook/addon-a11y": "^10.2.10",
     "@storybook/addon-docs": "^10.2.10",
+    "@storybook/addon-themes": "^10.2.10",
     "@storybook/addon-vitest": "^10.2.10",
     "@storybook/react-vite": "^10.2.10",
     "@testing-library/jest-dom": "^6.9.1",
@@ -56,6 +58,7 @@
     "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",
     "axe-core": "^4.11.1",
+    "chromatic": "^15.1.1",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",

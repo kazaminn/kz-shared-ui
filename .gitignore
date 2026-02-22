@@ -27,3 +27,7 @@ dist-ssr
 *storybook.log
 storybook-static
 .claude/settings.local.json
+
+# enviromental variable
+.env
+.env.*

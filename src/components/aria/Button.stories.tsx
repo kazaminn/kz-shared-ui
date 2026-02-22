@@ -26,10 +26,14 @@ const meta = {
   },
   args: {
     children: 'Button',
+    variant: 'primary',
+    size: 'md',
+    isDisabled: false,
   },
 } satisfies Meta<typeof Button>;
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
@@ -137,6 +141,72 @@ export const DisabledVariants: Story = {
       <Button variant="link" isDisabled>
         Link
       </Button>
+    </div>
+  ),
+};
+
+export const SizesByVariant: Story = {
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-wrap items-center gap-4">
+        <Button variant="primary" size="sm">
+          Primary sm
+        </Button>
+        <Button variant="primary" size="md">
+          Primary md
+        </Button>
+        <Button variant="primary" size="lg">
+          Primary lg
+        </Button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-4">
+        <Button variant="secondary" size="sm">
+          Secondary sm
+        </Button>
+        <Button variant="secondary" size="md">
+          Secondary md
+        </Button>
+        <Button variant="secondary" size="lg">
+          Secondary lg
+        </Button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-4">
+        <Button variant="outline" size="sm">
+          Outline sm
+        </Button>
+        <Button variant="outline" size="md">
+          Outline md
+        </Button>
+        <Button variant="outline" size="lg">
+          Outline lg
+        </Button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-4">
+        <Button variant="destructive" size="sm">
+          Destructive sm
+        </Button>
+        <Button variant="destructive" size="md">
+          Destructive md
+        </Button>
+        <Button variant="destructive" size="lg">
+          Destructive lg
+        </Button>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-4">
+        <Button variant="link" size="sm">
+          Link sm
+        </Button>
+        <Button variant="link" size="md">
+          Link md
+        </Button>
+        <Button variant="link" size="lg">
+          Link lg
+        </Button>
+      </div>
     </div>
   ),
 };

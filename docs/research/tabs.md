@@ -23,13 +23,14 @@
 
 ```tsx
 import {
-  Tabs,
-  TabList,
-  Tab,
-  TabPanel,
-  Collection,    // 動的コレクションの場合
-  type TabsProps,
+  Collection,
   type Key,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+  // 動的コレクションの場合
+  type TabsProps,
 } from 'react-aria-components';
 ```
 
@@ -37,57 +38,59 @@ import {
 
 ### Tabs
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `selectedKey` | `Key \| null` | — | 選択中のタブキー（制御） |
-| `defaultSelectedKey` | `Key` | — | 初期選択タブキー（非制御） |
-| `onSelectionChange` | `(key: Key) => void` | — | 選択変化ハンドラ |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | タブの向き |
-| `keyboardActivation` | `'automatic' \| 'manual'` | `'automatic'` | フォーカスで自動選択 or Enter/Space で選択 |
-| `isDisabled` | `boolean` | — | 全タブ無効化 |
-| `disabledKeys` | `Iterable<Key>` | — | 個別タブを無効にするキー |
+| prop                 | 型                           | デフォルト     | 説明                                       |
+| -------------------- | ---------------------------- | -------------- | ------------------------------------------ |
+| `selectedKey`        | `Key \| null`                | —              | 選択中のタブキー（制御）                   |
+| `defaultSelectedKey` | `Key`                        | —              | 初期選択タブキー（非制御）                 |
+| `onSelectionChange`  | `(key: Key) => void`         | —              | 選択変化ハンドラ                           |
+| `orientation`        | `'horizontal' \| 'vertical'` | `'horizontal'` | タブの向き                                 |
+| `keyboardActivation` | `'automatic' \| 'manual'`    | `'automatic'`  | フォーカスで自動選択 or Enter/Space で選択 |
+| `isDisabled`         | `boolean`                    | —              | 全タブ無効化                               |
+| `disabledKeys`       | `Iterable<Key>`              | —              | 個別タブを無効にするキー                   |
 
 ### Tab
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `id` | `Key` | — | タブの一意なID（TabPanelのidと対応） |
-| `isDisabled` | `boolean` | — | このタブを無効化 |
-| `href` | `string` | — | リンクタブ（クライアントサイドルーティング対応） |
-| `onPress` | `(e: PressEvent) => void` | — | タブ押下ハンドラ |
-| `onHoverStart` / `onHoverEnd` / `onHoverChange` | — | — | ホバーイベント |
+| prop                                            | 型                        | デフォルト | 説明                                             |
+| ----------------------------------------------- | ------------------------- | ---------- | ------------------------------------------------ |
+| `id`                                            | `Key`                     | —          | タブの一意なID（TabPanelのidと対応）             |
+| `isDisabled`                                    | `boolean`                 | —          | このタブを無効化                                 |
+| `href`                                          | `string`                  | —          | リンクタブ（クライアントサイドルーティング対応） |
+| `onPress`                                       | `(e: PressEvent) => void` | —          | タブ押下ハンドラ                                 |
+| `onHoverStart` / `onHoverEnd` / `onHoverChange` | —                         | —          | ホバーイベント                                   |
 
 ### TabList
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `aria-label` | `string` | — | TabList のアクセシブルラベル（推奨） |
-| `items` | `Iterable<T>` | — | 動的コレクション用 |
+| prop         | 型            | デフォルト | 説明                                 |
+| ------------ | ------------- | ---------- | ------------------------------------ |
+| `aria-label` | `string`      | —          | TabList のアクセシブルラベル（推奨） |
+| `items`      | `Iterable<T>` | —          | 動的コレクション用                   |
 
 ### TabPanel
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `id` | `Key` | — | 対応するTabのIDと一致させる |
-| `shouldForceMount` | `boolean` | `false` | 非表示でもDOMにマウント（SEO・アニメーション対応） |
+| prop               | 型        | デフォルト | 説明                                               |
+| ------------------ | --------- | ---------- | -------------------------------------------------- |
+| `id`               | `Key`     | —          | 対応するTabのIDと一致させる                        |
+| `shouldForceMount` | `boolean` | `false`    | 非表示でもDOMにマウント（SEO・アニメーション対応） |
 
 ## 状態セレクタ（tailwindcss-react-aria-components）
 
 ### Tab
-| セレクタ | 条件 |
-|---------|------|
-| `selected:` | 選択中（`data-selected`） |
-| `hovered:` | ホバー中（`data-hovered`） |
-| `pressed:` | プレス中（`data-pressed`） |
+
+| セレクタ         | 条件                                         |
+| ---------------- | -------------------------------------------- |
+| `selected:`      | 選択中（`data-selected`）                    |
+| `hovered:`       | ホバー中（`data-hovered`）                   |
+| `pressed:`       | プレス中（`data-pressed`）                   |
 | `focus-visible:` | キーボードフォーカス（`data-focus-visible`） |
-| `disabled:` | 無効状態（`data-disabled`） |
-| `focus-visible:` | キーボードフォーカス |
+| `disabled:`      | 無効状態（`data-disabled`）                  |
+| `focus-visible:` | キーボードフォーカス                         |
 
 ### Tabs ルート
-| セレクタ | 条件 |
-|---------|------|
+
+| セレクタ                  | 条件                                        |
+| ------------------------- | ------------------------------------------- |
 | `orientation-horizontal:` | 水平向き（`data-orientation="horizontal"`） |
-| `orientation-vertical:` | 垂直向き（`data-orientation="vertical"`） |
+| `orientation-vertical:`   | 垂直向き（`data-orientation="vertical"`）   |
 
 ## kz-shared-ui 実装方針メモ
 
@@ -101,13 +104,13 @@ Tabs は TabList + Tab + TabPanel をセットで export する。
 // アプローチ1: selected: で下線を表示
 const tabStyles = tv({
   base: [
-    'px-4 py-2 text-sm font-medium cursor-default',
+    'cursor-default px-4 py-2 text-sm font-medium',
     'outline-none',
     'border-b-2 border-transparent',
     'focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-inset',
     'text-muted',
     'hovered:text-body',
-    'disabled:text-disabled disabled:cursor-not-allowed',
+    'disabled:cursor-not-allowed disabled:text-disabled',
     'transition-colors duration-150',
   ],
   variants: {
@@ -119,9 +122,10 @@ const tabStyles = tv({
 ```
 
 `selected:` セレクタを使う場合：
+
 ```tsx
 // selected: でボーダー色を切り替え
-'selected:border-primary selected:text-primary'
+'selected:border-primary selected:text-primary';
 ```
 
 ### tv() でのスタイル設計
@@ -132,19 +136,19 @@ const tabListStyles = tv({
   variants: {
     orientation: {
       horizontal: 'flex-row',
-      vertical: 'flex-col border-b-0 border-r',
+      vertical: 'flex-col border-r border-b-0',
     },
   },
 });
 
 const tabStyles = tv({
   base: [
-    'px-4 py-2 text-sm font-medium cursor-default',
-    'outline-none border-b-2 border-transparent -mb-px',
+    'cursor-default px-4 py-2 text-sm font-medium',
+    '-mb-px border-b-2 border-transparent outline-none',
     'text-muted transition-colors duration-150',
     'focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-inset',
     'hovered:text-body',
-    'selected:border-primary selected:text-primary',
+    'selected:text-primary selected:border-primary',
     'disabled:text-disabled',
   ],
 });
@@ -164,12 +168,12 @@ export type TabsProps = AriaTabsProps & {
 
 ### キーボード操作
 
-| キー | 動作 |
-|-----|------|
-| `Tab` | TabList にフォーカス → TabPanel にフォーカス |
+| キー                               | 動作                                                                |
+| ---------------------------------- | ------------------------------------------------------------------- |
+| `Tab`                              | TabList にフォーカス → TabPanel にフォーカス                        |
 | `←` / `→`（水平）`↑` / `↓`（垂直） | タブ間を移動（`automatic` では即選択、`manual` ではフォーカスのみ） |
-| `Enter` / `Space` | `manual` モードで選択 |
-| `Home` / `End` | 最初・最後のタブへ |
+| `Enter` / `Space`                  | `manual` モードで選択                                               |
+| `Home` / `End`                     | 最初・最後のタブへ                                                  |
 
 ### 注意点
 

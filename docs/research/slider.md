@@ -9,11 +9,11 @@
 ```tsx
 <Slider>
   <Label />
-  <SliderOutput />       {/* 現在値の表示 */}
+  <SliderOutput /> {/* 現在値の表示 */}
   <SliderTrack>
     {/* render prop 内でトラック・フィル・サムを配置 */}
     <SliderThumb />
-    <SliderThumb />      {/* 範囲スライダーの場合は2つ */}
+    <SliderThumb /> {/* 範囲スライダーの場合は2つ */}
   </SliderTrack>
 </Slider>
 ```
@@ -22,12 +22,12 @@
 
 ```tsx
 import {
+  Label,
   Slider,
   SliderOutput,
-  SliderTrack,
-  SliderThumb,
-  Label,
   type SliderProps,
+  SliderThumb,
+  SliderTrack,
 } from 'react-aria-components';
 ```
 
@@ -35,27 +35,27 @@ import {
 
 ### Slider
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `value` | `number \| number[]` | — | 現在の値（制御） |
-| `defaultValue` | `number \| number[]` | — | 初期値（非制御） |
-| `onChange` | `(value: T) => void` | — | ドラッグ中に発火 |
-| `onChangeEnd` | `(value: T) => void` | — | ドラッグ終了時に発火 |
-| `minValue` | `number` | `0` | 最小値 |
-| `maxValue` | `number` | `100` | 最大値 |
-| `step` | `number` | `1` | ステップ幅 |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | 向き |
-| `isDisabled` | `boolean` | — | 無効化 |
-| `formatOptions` | `Intl.NumberFormatOptions` | — | 値ラベルの表示フォーマット |
+| prop            | 型                           | デフォルト     | 説明                       |
+| --------------- | ---------------------------- | -------------- | -------------------------- |
+| `value`         | `number \| number[]`         | —              | 現在の値（制御）           |
+| `defaultValue`  | `number \| number[]`         | —              | 初期値（非制御）           |
+| `onChange`      | `(value: T) => void`         | —              | ドラッグ中に発火           |
+| `onChangeEnd`   | `(value: T) => void`         | —              | ドラッグ終了時に発火       |
+| `minValue`      | `number`                     | `0`            | 最小値                     |
+| `maxValue`      | `number`                     | `100`          | 最大値                     |
+| `step`          | `number`                     | `1`            | ステップ幅                 |
+| `orientation`   | `'horizontal' \| 'vertical'` | `'horizontal'` | 向き                       |
+| `isDisabled`    | `boolean`                    | —              | 無効化                     |
+| `formatOptions` | `Intl.NumberFormatOptions`   | —              | 値ラベルの表示フォーマット |
 
 ### SliderThumb
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `index` | `number` | `0` | 複数サムの場合のインデックス |
-| `aria-label` | `string` | — | スクリーンリーダー用ラベル（範囲スライダーでは必須） |
-| `isDisabled` | `boolean` | — | 個別サムの無効化 |
-| `name` | `string` | — | フォーム送信時の名前 |
+| prop         | 型        | デフォルト | 説明                                                 |
+| ------------ | --------- | ---------- | ---------------------------------------------------- |
+| `index`      | `number`  | `0`        | 複数サムの場合のインデックス                         |
+| `aria-label` | `string`  | —          | スクリーンリーダー用ラベル（範囲スライダーでは必須） |
+| `isDisabled` | `boolean` | —          | 個別サムの無効化                                     |
+| `name`       | `string`  | —          | フォーム送信時の名前                                 |
 
 ## SliderTrackRenderProps・SliderThumbRenderProps
 
@@ -75,28 +75,28 @@ import {
 
 ### SliderThumb の状態
 
-| データ属性 | セレクタ | 条件 |
-|-----------|---------|------|
-| `data-dragging` | `dragging:` | ドラッグ中 |
-| `data-hovered` | `hovered:` | ホバー中 |
-| `data-focused` | `focused:` | フォーカス中 |
+| データ属性           | セレクタ         | 条件                 |
+| -------------------- | ---------------- | -------------------- |
+| `data-dragging`      | `dragging:`      | ドラッグ中           |
+| `data-hovered`       | `hovered:`       | ホバー中             |
+| `data-focused`       | `focused:`       | フォーカス中         |
 | `data-focus-visible` | `focus-visible:` | キーボードフォーカス |
-| `data-disabled` | `disabled:` | 無効状態 |
+| `data-disabled`      | `disabled:`      | 無効状態             |
 
 ### SliderTrack の状態
 
-| データ属性 | セレクタ | 条件 |
-|-----------|---------|------|
-| `data-hovered` | `hovered:` | ホバー中 |
-| `data-orientation` | `orientation-horizontal:` / `orientation-vertical:` | 向き |
-| `data-disabled` | `disabled:` | 無効状態 |
+| データ属性         | セレクタ                                            | 条件     |
+| ------------------ | --------------------------------------------------- | -------- |
+| `data-hovered`     | `hovered:`                                          | ホバー中 |
+| `data-orientation` | `orientation-horizontal:` / `orientation-vertical:` | 向き     |
+| `data-disabled`    | `disabled:`                                         | 無効状態 |
 
 ### Slider ルートの状態
 
-| データ属性 | セレクタ | 条件 |
-|-----------|---------|------|
-| `data-orientation` | `orientation-horizontal:` / `orientation-vertical:` | 向き |
-| `data-disabled` | `disabled:` | 無効状態 |
+| データ属性         | セレクタ                                            | 条件     |
+| ------------------ | --------------------------------------------------- | -------- |
+| `data-orientation` | `orientation-horizontal:` / `orientation-vertical:` | 向き     |
+| `data-disabled`    | `disabled:`                                         | 無効状態 |
 
 ## kz-shared-ui 実装方針メモ
 
@@ -105,6 +105,7 @@ import {
 フィル（塗りつぶし部分）は CSS absolute で独自実装が必要。RAC は視覚的なフィルを提供しないため、`state.getThumbPercent(0)` を使って CSS 変数で幅を指定する。
 
 単一サムのフィル例：
+
 ```tsx
 <div
   className="absolute h-full rounded-full bg-primary"
@@ -117,13 +118,13 @@ import {
 ```tsx
 const thumbStyles = tv({
   base: [
-    'w-5 h-5 rounded-full',
-    'bg-primary border-2 border-white',
-    'shadow-sm cursor-grab',
+    'h-5 w-5 rounded-full',
+    'border-2 border-white bg-primary',
+    'cursor-grab shadow-sm',
     'outline-none',
     'focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2',
-    'dragging:cursor-grabbing dragging:scale-110',
-    'disabled:bg-disabled disabled:cursor-not-allowed',
+    'dragging:scale-110 dragging:cursor-grabbing',
+    'disabled:cursor-not-allowed disabled:bg-disabled',
     'transition-transform duration-100',
   ],
 });
@@ -133,7 +134,7 @@ const trackStyles = tv({
   variants: {
     orientation: {
       horizontal: 'h-5 w-full',
-      vertical: 'w-5 h-40',
+      vertical: 'h-40 w-5',
     },
   },
 });
@@ -144,7 +145,7 @@ const trackStyles = tv({
 ```tsx
 export type SliderProps<T extends number | number[]> = AriaSliderProps<T> & {
   label?: string;
-  thumbLabels?: string[];  // 範囲スライダー用 aria-label
+  thumbLabels?: string[]; // 範囲スライダー用 aria-label
   className?: string;
 };
 ```

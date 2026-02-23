@@ -120,7 +120,7 @@ describe('Tabs', () => {
         <TabPanel id="tab1">Content 1</TabPanel>
       </Tabs>
     );
-    expect(screen.getByRole('tablist').closest('[class*="flex"]')).toHaveClass(
+    expect(screen.getByRole('tablist').parentElement).toHaveClass(
       'custom-class'
     );
   });

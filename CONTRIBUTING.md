@@ -10,15 +10,14 @@
 ## ブランチ運用
 
 - main：常に安定（直接pushしない）
-- 作業ブランチ：`<type>/<短い説明>`
-
-例：
-
-- feat/issue-1-add-card-share
-- fix/issue-2-null-pointer-on-preview
-
-- feat/issue-{番号}-{コンポーネント名小文字}
-- fix/issue-{番号}-{内容}
+- 作業ブランチ：`<type>/<short description>`
+  - AIが作業するブランチはprefixを付ける
+    - claude code: `claude/<type>/<short description>`、
+    - codex: `codex/<type>/<short description>`
+  - ブランチ名の例:
+    - feat/issue-1-add-card-share
+    - fix/issue-2-null-pointer-on-preview
+    - claude/feat/issue-123-button
 
 ---
 
@@ -50,6 +49,11 @@
 ### subject
 
 - 英語で統一（動詞は、現在形 or 命令形）
+
+### body
+
+- 原則、英語で書く。
+- 人間のために日本語も許容する。
 
 ### コミット粒度
 

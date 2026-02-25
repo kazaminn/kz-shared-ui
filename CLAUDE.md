@@ -137,28 +137,6 @@ export default tseslint.config(
 
 インポートのソートは `@trivago/prettier-plugin-sort-imports` で Prettier 側に一本化する。ESLint の `import/order` 系ルールは無効化する。
 
-## Husky / lint-staged 構成
-
-### 方針
-
-自分で作業するときはエディタの ESLint で十分なため pre-commit をスキップする。AI 生成で作業させるときのみ pre-commit を実行する。commit-msg（commitlint）は常に実行する。
-
-- 環境変数 `$HUSKY_PRE_COMMIT`
-  - `0`: `[husky] pre-commit: skipped`
-  - `1`: `[husky] pre-commit: running lint-staged`
-
-### AI 生成時のコミット方法
-
-```bash
-npm run commit:ai -- -m "メッセージ"
-```
-
-`package.json` の `scripts` に追加済み（`cross-env` を使用）:
-
-```json
-"commit:ai": "cross-env HUSKY_PRE_COMMIT=1 git commit"
-```
-
 ## テスト構成
 
 ### アクセシビリティテスト
@@ -308,7 +286,7 @@ Tailwind v4 の `@theme` で自動的にユーティリティクラスが生成�
 
 ### components/aria（react-aria-components wrapper）
 
-**役割:** react-aria-components をラップしてスタイルを適用するだけ
+**役割:** react-aria-components をラップしてスタイルを適用するだけ。React AriaのRenderPropsはUIライブラリ内部で吸収する
 
 **実装例: Button**
 
@@ -320,31 +298,14 @@ import {
 import { type VariantProps, tv } from '@/lib/tv';
 
 const buttonVariants = tv({
-  base: [
-    'inline-flex items-center justify-center gap-2',
-    'rounded-md font-medium',
-    'transition-colors duration-150',
-    'outline-none',
-    'cursor-pointer',
-    'focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2',
-    'disabled:pointer-events-none disabled:opacity-50',
-    'select-none',
-  ],
+  base: [　/* ... */  ],
   variants: {
     variant: {
-      primary:
-        'bg-primary text-primary-foreground hover:bg-primary-hover pressed:bg-primary-hover',
-      secondary:
-        'bg-secondary text-secondary-foreground hover:bg-secondary-hover pressed:bg-secondary-hover',
-      outline: 'border border-main bg-transparent text-body hover:bg-surface',
-      destructive:
-        'bg-danger text-danger-foreground hover:bg-danger-hover pressed:bg-danger-hover',
-      link: 'bg-transparent text-link underline-offset-4 hover:text-link-hover pressed:text-link-active',
-    },
+      primary: ``,
+      // ... other variants.
     size: {
-      sm: 'h-8 px-3 text-sm',
       md: 'h-10 px-4 text-base',
-      lg: 'h-12 px-6 text-lg',
+      // ... other size
     },
   },
   defaultVariants: {
@@ -366,8 +327,8 @@ export const Button: React.FC<ButtonProps> = ({
 }: ButtonProps) => {
   return (
     <AriaButton
-      className={buttonVariants({ variant, size, className })}
       {...props}
+      className={buttonVariants({ variant, size, className })}
     />
   );
 };
@@ -381,16 +342,8 @@ export const Button: React.FC<ButtonProps> = ({
 3. **outline-none:** base に含めてブラウザデフォルトのアウトラインを消す
 4. **Props 型:** `AriaButtonProps` + `VariantProps` + `{ className?: string }` の交差型
 5. **import:** `@/lib/tv` から import する
-
-**variant の設計思想:**
-
-現状の `variant` は見た目の形（solid / outline / link）と意味・色（intent）が混在した暫定設計。将来的には `variant`（形）と `intent`（色）を別軸に分離する。現状の対応関係は以下の通り:
-
-- `primary` → intent: primary のソリッドボタン
-- `secondary` → intent: secondary のソリッドボタン
-- `destructive` → intent: danger のソリッドボタン
-- `outline` → base カラーを使用したアウトラインボタン（intent は将来対応）
-- `link` → リンク風ボタン
+   - `tv`を使う
+   - renderPropsのfunctionも通したい場合、`composeProps`を使う
 
 ### components/ui（自作コンポーネント）
 
@@ -595,16 +548,15 @@ Unit テストでは以下を網羅的に確認する：
 
 ## issue → PR → マージ の流れ
 
-```
 1. GitHub issue を作成
 2. 作業ブランチを作成
+   AIが作業するブランチは`claude/`、`codex/`を使用する。
 3. 実装
 4. ユニットテストが通ることを確認
    npm run test
 5. PR を作成
    gh pr create --title "feat: XXX" --body "closes #N"
 6. レビュー後にマージ
-```
 
 ## ブランチ命名規則
 

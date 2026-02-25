@@ -33,17 +33,17 @@
 ```tsx
 import {
   Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
   CardBody,
-  CardFooter,
-  type CardProps,
-  type CardHeaderProps,
-  type CardTitleProps,
-  type CardDescriptionProps,
   type CardBodyProps,
+  CardDescription,
+  type CardDescriptionProps,
+  CardFooter,
   type CardFooterProps,
+  CardHeader,
+  type CardHeaderProps,
+  type CardProps,
+  CardTitle,
+  type CardTitleProps,
 } from 'kz-shared-ui';
 ```
 
@@ -58,14 +58,14 @@ import {
 
 ## 各コンポーネントの役割と HTML 要素
 
-| コンポーネント | HTML 要素 | 役割 |
-|--------------|-----------|------|
-| `Card` | `<div>` | 外枠・シャドウ・背景・ボーダー |
-| `CardHeader` | `<div>` | タイトル・説明文のまとめ領域 |
-| `CardTitle` | `<h3>`（デフォルト） | カードのタイトル |
-| `CardDescription` | `<p>` | タイトルの補足説明文 |
-| `CardBody` | `<div>` | メインコンテンツ領域 |
-| `CardFooter` | `<div>` | アクションボタン等のフッター |
+| コンポーネント    | HTML 要素            | 役割                           |
+| ----------------- | -------------------- | ------------------------------ |
+| `Card`            | `<div>`              | 外枠・シャドウ・背景・ボーダー |
+| `CardHeader`      | `<div>`              | タイトル・説明文のまとめ領域   |
+| `CardTitle`       | `<h3>`（デフォルト） | カードのタイトル               |
+| `CardDescription` | `<p>`                | タイトルの補足説明文           |
+| `CardBody`        | `<div>`              | メインコンテンツ領域           |
+| `CardFooter`      | `<div>`              | アクションボタン等のフッター   |
 
 ---
 
@@ -73,20 +73,20 @@ import {
 
 ### Card
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `children` | `ReactNode` | — | 子コンポーネント |
-| `className` | `string` | — | 追加クラス |
-| `as` | `ElementType` | `'div'` | ルート要素の変更（省略可） |
+| prop        | 型            | デフォルト | 説明                       |
+| ----------- | ------------- | ---------- | -------------------------- |
+| `children`  | `ReactNode`   | —          | 子コンポーネント           |
+| `className` | `string`      | —          | 追加クラス                 |
+| `as`        | `ElementType` | `'div'`    | ルート要素の変更（省略可） |
 
 React の標準 `HTMLAttributes<HTMLDivElement>` を spread できる形にする。
 
 ### CardTitle
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `as` | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'h5' \| 'h6'` | `'h3'` | 見出しレベルの変更 |
-| `className` | `string` | — | 追加クラス |
+| prop        | 型                                             | デフォルト | 説明               |
+| ----------- | ---------------------------------------------- | ---------- | ------------------ |
+| `as`        | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'h5' \| 'h6'` | `'h3'`     | 見出しレベルの変更 |
+| `className` | `string`                                       | —          | 追加クラス         |
 
 見出しレベルはページの文書構造に応じて呼び出し側が指定できるようにする。
 
@@ -97,11 +97,7 @@ React の標準 `HTMLAttributes<HTMLDivElement>` を spread できる形にす�
 ```tsx
 // Card ルート
 const card = tv({
-  base: [
-    'rounded-lg border border-main bg-surface',
-    'shadow-sm',
-    'text-body',
-  ],
+  base: ['rounded-lg border border-main bg-surface', 'shadow-sm', 'text-body'],
   variants: {
     // 将来の拡張用（例: variant="outlined" / "elevated" 等）
   },
@@ -114,7 +110,7 @@ const cardHeader = tv({
 
 // CardTitle
 const cardTitle = tv({
-  base: 'text-xl font-semibold leading-tight text-body',
+  base: 'text-xl leading-tight font-semibold text-body',
 });
 
 // CardDescription
@@ -129,7 +125,7 @@ const cardBody = tv({
 
 // CardFooter
 const cardFooter = tv({
-  base: 'flex items-center px-6 pb-6 pt-0 gap-3',
+  base: 'flex items-center gap-3 px-6 pt-0 pb-6',
 });
 ```
 
@@ -141,12 +137,14 @@ const cardFooter = tv({
 // Card.tsx
 import { tv } from '@/lib/tv';
 
-const cardStyles = tv({ base: 'rounded-lg border border-main bg-surface shadow-sm text-body' });
+const cardStyles = tv({
+  base: 'rounded-lg border border-main bg-surface text-body shadow-sm',
+});
 const cardHeaderStyles = tv({ base: 'flex flex-col gap-1.5 p-6' });
-const cardTitleStyles = tv({ base: 'text-xl font-semibold leading-tight' });
+const cardTitleStyles = tv({ base: 'text-xl leading-tight font-semibold' });
 const cardDescriptionStyles = tv({ base: 'text-sm text-muted' });
 const cardBodyStyles = tv({ base: 'px-6 pb-6' });
-const cardFooterStyles = tv({ base: 'flex items-center px-6 pb-6 pt-0 gap-3' });
+const cardFooterStyles = tv({ base: 'flex items-center gap-3 px-6 pt-0 pb-6' });
 
 export type CardProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -164,13 +162,20 @@ export type CardTitleProps = React.HTMLAttributes<HTMLHeadingElement> & {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 };
 
-export const CardTitle = ({ as: Tag = 'h3', className, ...props }: CardTitleProps) => (
+export const CardTitle = ({
+  as: Tag = 'h3',
+  className,
+  ...props
+}: CardTitleProps) => (
   <Tag className={cardTitleStyles({ className })} {...props} />
 );
 
 export type CardDescriptionProps = React.HTMLAttributes<HTMLParagraphElement>;
 
-export const CardDescription = ({ className, ...props }: CardDescriptionProps) => (
+export const CardDescription = ({
+  className,
+  ...props
+}: CardDescriptionProps) => (
   <p className={cardDescriptionStyles({ className })} {...props} />
 );
 
@@ -224,11 +229,19 @@ it('renders all sub-components', () => {
 ```tsx
 it('applies base card classes', () => {
   render(<Card data-testid="card">Content</Card>);
-  expect(screen.getByTestId('card')).toHaveClass('rounded-lg', 'border', 'bg-surface');
+  expect(screen.getByTestId('card')).toHaveClass(
+    'rounded-lg',
+    'border',
+    'bg-surface'
+  );
 });
 
 it('merges custom className', () => {
-  render(<Card className="w-full" data-testid="card">Content</Card>);
+  render(
+    <Card className="w-full" data-testid="card">
+      Content
+    </Card>
+  );
   expect(screen.getByTestId('card')).toHaveClass('w-full', 'rounded-lg');
 });
 ```
@@ -238,7 +251,9 @@ it('merges custom className', () => {
 ```tsx
 it('renders CardTitle as h3 by default', () => {
   render(<CardTitle>タイトル</CardTitle>);
-  expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('タイトル');
+  expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
+    'タイトル'
+  );
 });
 
 it('renders CardTitle as h2 when specified', () => {
@@ -335,11 +350,11 @@ Card 自体はインタラクションを持たない。クリッカブルにし
 
 ## 参考: shadcn/ui との対応
 
-| shadcn | kz-shared-ui | 変更点 |
-|--------|-------------|--------|
-| `Card` | `Card` | 同名 |
-| `CardHeader` | `CardHeader` | 同名 |
-| `CardTitle` | `CardTitle` | `as` prop で見出しレベル変更可能 |
-| `CardDescription` | `CardDescription` | 同名 |
-| `CardContent` | `CardBody` | 命名を `CardBody` に変更（CLAUDE.md 準拠） |
-| `CardFooter` | `CardFooter` | 同名 |
+| shadcn            | kz-shared-ui      | 変更点                                     |
+| ----------------- | ----------------- | ------------------------------------------ |
+| `Card`            | `Card`            | 同名                                       |
+| `CardHeader`      | `CardHeader`      | 同名                                       |
+| `CardTitle`       | `CardTitle`       | `as` prop で見出しレベル変更可能           |
+| `CardDescription` | `CardDescription` | 同名                                       |
+| `CardContent`     | `CardBody`        | 命名を `CardBody` に変更（CLAUDE.md 準拠） |
+| `CardFooter`      | `CardFooter`      | 同名                                       |

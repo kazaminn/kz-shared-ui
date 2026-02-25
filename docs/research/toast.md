@@ -13,11 +13,14 @@
 
 ```tsx
 // アプリルート（または layout）に配置
-<ToastRegion queue={queue} />
+<ToastRegion queue={queue} />;
 
 // どこからでも呼び出し可能
 queue.add({ title: '保存しました' });
-queue.add({ title: 'エラー', description: '再試行してください' }, { timeout: 5000 });
+queue.add(
+  { title: 'エラー', description: '再試行してください' },
+  { timeout: 5000 }
+);
 ```
 
 コンポーネント構成：
@@ -29,7 +32,9 @@ queue.add({ title: 'エラー', description: '再試行してください' }, { 
       <ToastContent>
         <Text slot="title">タイトル</Text>
         <Text slot="description">説明</Text>
-        <Button slot="close" aria-label="閉じる">✕</Button>
+        <Button slot="close" aria-label="閉じる">
+          ✕
+        </Button>
       </ToastContent>
     </Toast>
   )}
@@ -40,13 +45,13 @@ queue.add({ title: 'エラー', description: '再試行してください' }, { 
 
 ```tsx
 import {
-  UNSTABLE_ToastRegion as ToastRegion,
-  UNSTABLE_Toast as Toast,
-  UNSTABLE_ToastQueue as ToastQueue,
-  UNSTABLE_ToastContent as ToastContent,
-  type ToastProps,
   Button,
   Text,
+  UNSTABLE_Toast as Toast,
+  UNSTABLE_ToastContent as ToastContent,
+  type ToastProps,
+  UNSTABLE_ToastQueue as ToastQueue,
+  UNSTABLE_ToastRegion as ToastRegion,
 } from 'react-aria-components';
 ```
 
@@ -54,7 +59,10 @@ import {
 
 ```tsx
 // src/components/aria/Toast/queue.ts
-import { UNSTABLE_ToastQueue as ToastQueue, flushSync } from 'react-aria-components';
+import {
+  UNSTABLE_ToastQueue as ToastQueue,
+  flushSync,
+} from 'react-aria-components';
 
 type ToastContent = {
   title: string;
@@ -79,12 +87,12 @@ export const queue = new ToastQueue<ToastContent>({
 
 ### `queue.add(content, options?)`
 
-| 引数 | 型 | 説明 |
-|-----|----|------|
-| `content.title` | `string`（必須） | トーストのタイトル |
-| `content.description` | `string` | サブテキスト（省略可） |
-| `options.timeout` | `number` | 自動消去までのms（省略で手動閉じのみ） |
-| `options.onClose` | `() => void` | 閉じた時のコールバック |
+| 引数                  | 型               | 説明                                   |
+| --------------------- | ---------------- | -------------------------------------- |
+| `content.title`       | `string`（必須） | トーストのタイトル                     |
+| `content.description` | `string`         | サブテキスト（省略可）                 |
+| `options.timeout`     | `number`         | 自動消去までのms（省略で手動閉じのみ） |
+| `options.onClose`     | `() => void`     | 閉じた時のコールバック                 |
 
 戻り値: `key`（`queue.close(key)` で手動消去可能）
 
@@ -96,41 +104,43 @@ export const queue = new ToastQueue<ToastContent>({
 
 ### ToastRegion
 
-| prop | 型 | 説明 |
-|------|----|------|
-| `queue` | `ToastQueue<T>` | グローバルキューインスタンス（必須） |
-| `children` | `(renderProps: { toast }) => ReactNode` | 各トーストのレンダリング関数 |
+| prop       | 型                                      | 説明                                 |
+| ---------- | --------------------------------------- | ------------------------------------ |
+| `queue`    | `ToastQueue<T>`                         | グローバルキューインスタンス（必須） |
+| `children` | `(renderProps: { toast }) => ReactNode` | 各トーストのレンダリング関数         |
 
 ### Toast
 
-| prop | 型 | 説明 |
-|------|----|------|
-| `toast` | `QueuedToast<T>` | キューから渡されるトーストオブジェクト（必須） |
-| `className` | `string \| ClassNameFunction` | クラス名 |
+| prop        | 型                            | 説明                                           |
+| ----------- | ----------------------------- | ---------------------------------------------- |
+| `toast`     | `QueuedToast<T>`              | キューから渡されるトーストオブジェクト（必須） |
+| `className` | `string \| ClassNameFunction` | クラス名                                       |
 
 ### ToastContent（スロット構成）
 
-| スロット | コンポーネント | 必須 |
-|---------|--------------|------|
-| `title` | `<Text slot="title">` | ✅ |
-| `description` | `<Text slot="description">` | 任意 |
-| `close` | `<Button slot="close">` | 任意（手動閉じが必要な場合） |
+| スロット      | コンポーネント              | 必須                         |
+| ------------- | --------------------------- | ---------------------------- |
+| `title`       | `<Text slot="title">`       | ✅                           |
+| `description` | `<Text slot="description">` | 任意                         |
+| `close`       | `<Button slot="close">`     | 任意（手動閉じが必要な場合） |
 
 ## 状態セレクタ（tailwindcss-react-aria-components）
 
 ### Toast
-| セレクタ | 条件 |
-|---------|------|
-| `hovered:` | ホバー中（`data-hovered`） |
+
+| セレクタ         | 条件                                         |
+| ---------------- | -------------------------------------------- |
+| `hovered:`       | ホバー中（`data-hovered`）                   |
 | `focus-visible:` | キーボードフォーカス（`data-focus-visible`） |
-| `entering:` | 表示アニメーション中（`data-entering`） |
-| `exiting:` | 消去アニメーション中（`data-exiting`） |
+| `entering:`      | 表示アニメーション中（`data-entering`）      |
+| `exiting:`       | 消去アニメーション中（`data-exiting`）       |
 
 ### Button (close)
-| セレクタ | 条件 |
-|---------|------|
-| `hovered:` | ホバー中 |
-| `pressed:` | プレス中 |
+
+| セレクタ         | 条件                 |
+| ---------------- | -------------------- |
+| `hovered:`       | ホバー中             |
+| `pressed:`       | プレス中             |
 | `focus-visible:` | キーボードフォーカス |
 
 ## アクセシビリティ設計
@@ -175,8 +185,8 @@ import { queue } from './queue';
 
 const toastStyles = tv({
   base: [
-    'flex items-start gap-3 p-4 rounded-lg shadow-lg',
-    'bg-surface border border-main',
+    'flex items-start gap-3 rounded-lg p-4 shadow-lg',
+    'border border-main bg-surface',
     'text-body',
     'entering:animate-slide-in exiting:animate-slide-out',
   ],
@@ -184,17 +194,20 @@ const toastStyles = tv({
 
 export function ToastRegion() {
   return (
-    <AriaToastRegion queue={queue} className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+    <AriaToastRegion
+      queue={queue}
+      className="fixed right-4 bottom-4 z-50 flex flex-col gap-2"
+    >
       {({ toast }) => (
         <AriaToast toast={toast} className={toastStyles()}>
           <AriaToastContent>
-            <Text slot="title" className="font-medium text-sm" />
+            <Text slot="title" className="text-sm font-medium" />
             <Text slot="description" className="text-sm text-muted" />
           </AriaToastContent>
           <Button
             slot="close"
             aria-label="閉じる"
-            className="shrink-0 text-muted hovered:text-body focus-visible:ring-2 focus-visible:ring-focus-ring rounded"
+            className="hovered:text-body shrink-0 rounded text-muted focus-visible:ring-2 focus-visible:ring-focus-ring"
           >
             ✕
           </Button>
@@ -213,10 +226,11 @@ export { queue as toast };
 ```tsx
 // アプリルートに1回だけ配置
 import { ToastRegion } from 'kz-shared-ui';
-<ToastRegion />
-
 // 任意の場所で呼び出し
 import { toast } from 'kz-shared-ui';
+
+<ToastRegion />;
+
 toast.add({ title: 'リンクをコピーしました' }, { timeout: 4000 });
 toast.add({ title: 'エラー', description: '後でもう一度お試しください' });
 ```

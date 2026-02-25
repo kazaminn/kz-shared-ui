@@ -27,47 +27,47 @@ import {
 
 ## 主要 props
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `isSelected` | `boolean` | — | 選択状態（制御） |
-| `defaultSelected` | `boolean` | — | 初期選択状態（非制御） |
-| `onChange` | `(isSelected: boolean) => void` | — | 変更ハンドラ |
-| `isDisabled` | `boolean` | — | 無効化 |
-| `isReadOnly` | `boolean` | — | 読み取り専用 |
-| `name` | `string` | — | フォーム送信時の名前 |
-| `value` | `string` | — | フォーム送信時の値 |
-| `autoFocus` | `boolean` | — | 自動フォーカス |
-| `inputRef` | `RefObject<HTMLInputElement>` | — | input への ref |
-| `children` | `ReactNode \| (renderProps) => ReactNode` | — | ラベルテキスト or render prop |
-| `onFocus` / `onBlur` | — | — | フォーカスイベント |
-| `onFocusChange` | `(isFocused: boolean) => void` | — | フォーカス変化 |
-| `onHoverStart` / `onHoverEnd` / `onHoverChange` | — | — | ホバーイベント |
-| `onKeyDown` / `onKeyUp` | — | — | キーイベント |
+| prop                                            | 型                                        | デフォルト | 説明                          |
+| ----------------------------------------------- | ----------------------------------------- | ---------- | ----------------------------- |
+| `isSelected`                                    | `boolean`                                 | —          | 選択状態（制御）              |
+| `defaultSelected`                               | `boolean`                                 | —          | 初期選択状態（非制御）        |
+| `onChange`                                      | `(isSelected: boolean) => void`           | —          | 変更ハンドラ                  |
+| `isDisabled`                                    | `boolean`                                 | —          | 無効化                        |
+| `isReadOnly`                                    | `boolean`                                 | —          | 読み取り専用                  |
+| `name`                                          | `string`                                  | —          | フォーム送信時の名前          |
+| `value`                                         | `string`                                  | —          | フォーム送信時の値            |
+| `autoFocus`                                     | `boolean`                                 | —          | 自動フォーカス                |
+| `inputRef`                                      | `RefObject<HTMLInputElement>`             | —          | input への ref                |
+| `children`                                      | `ReactNode \| (renderProps) => ReactNode` | —          | ラベルテキスト or render prop |
+| `onFocus` / `onBlur`                            | —                                         | —          | フォーカスイベント            |
+| `onFocusChange`                                 | `(isFocused: boolean) => void`            | —          | フォーカス変化                |
+| `onHoverStart` / `onHoverEnd` / `onHoverChange` | —                                         | —          | ホバーイベント                |
+| `onKeyDown` / `onKeyUp`                         | —                                         | —          | キーイベント                  |
 
 ## SwitchRenderProps（children render prop で参照可能）
 
-| プロパティ | 型 | 説明 |
-|-----------|-----|------|
-| `isSelected` | `boolean` | 選択中か |
-| `isDisabled` | `boolean` | 無効か |
-| `isReadOnly` | `boolean` | 読み取り専用か |
-| `isHovered` | `boolean` | ホバー中か |
-| `isFocused` | `boolean` | フォーカス中か |
+| プロパティ       | 型        | 説明                   |
+| ---------------- | --------- | ---------------------- |
+| `isSelected`     | `boolean` | 選択中か               |
+| `isDisabled`     | `boolean` | 無効か                 |
+| `isReadOnly`     | `boolean` | 読み取り専用か         |
+| `isHovered`      | `boolean` | ホバー中か             |
+| `isFocused`      | `boolean` | フォーカス中か         |
 | `isFocusVisible` | `boolean` | キーボードフォーカスか |
-| `isPressed` | `boolean` | プレス中か |
+| `isPressed`      | `boolean` | プレス中か             |
 
 ## 状態セレクタ（tailwindcss-react-aria-components）
 
 `Switch` ルート（`<label>`）に付与されるデータ属性：
 
-| セレクタ | 条件 |
-|---------|------|
-| `selected:` | 選択中（`data-selected`） |
-| `disabled:` | 無効状態（`data-disabled`） |
+| セレクタ         | 条件                                         |
+| ---------------- | -------------------------------------------- |
+| `selected:`      | 選択中（`data-selected`）                    |
+| `disabled:`      | 無効状態（`data-disabled`）                  |
 | `focus-visible:` | キーボードフォーカス（`data-focus-visible`） |
-| `hovered:` | ホバー中（`data-hovered`） |
-| `pressed:` | プレス中（`data-pressed`） |
-| `readonly:` | 読み取り専用（`data-readonly`） |
+| `hovered:`       | ホバー中（`data-hovered`）                   |
+| `pressed:`       | プレス中（`data-pressed`）                   |
+| `readonly:`      | 読み取り専用（`data-readonly`）              |
 
 ## kz-shared-ui 実装方針メモ
 
@@ -94,7 +94,7 @@ children render prop で `isSelected` などを参照してスタイル切り替
 ```tsx
 const track = tv({
   base: [
-    'inline-flex items-center shrink-0 cursor-default',
+    'inline-flex shrink-0 cursor-default items-center',
     'h-6 w-11 rounded-full px-0.5',
     'border border-transparent',
     'transition-colors duration-200',
@@ -106,7 +106,7 @@ const track = tv({
       true: 'bg-primary',
     },
     isDisabled: {
-      true: 'opacity-50 cursor-not-allowed',
+      true: 'cursor-not-allowed opacity-50',
     },
   },
 });

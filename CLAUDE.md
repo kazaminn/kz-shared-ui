@@ -99,7 +99,10 @@ export default tseslint.config(
       'react/no-array-index-key': 'warn',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
 
       'jsx-a11y/click-events-have-key-events': 'error',
       'jsx-a11y/interactive-supports-focus': 'error',
@@ -368,7 +371,6 @@ export const Button: React.FC<ButtonProps> = ({
     />
   );
 };
-
 ```
 
 **重要なポイント:**
@@ -418,13 +420,13 @@ Card はコンテナに徹する。クリッカブルにしたい場合は呼び
 react-aria-components の `Label` と `Text` をスタイリングして使う。単体の自作コンポーネントは作らず、ariaラッパー内部で使う。
 
 ```tsx
-import { TextField, Label, Input, Text } from 'react-aria-components';
+import { Input, Label, Text, TextField } from 'react-aria-components';
 
 <TextField>
   <Label>メールアドレス</Label>
   <Input />
   <Text slot="errorMessage">入力してください</Text>
-</TextField>
+</TextField>;
 ```
 
 ## テスト方針

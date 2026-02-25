@@ -23,58 +23,66 @@ UI そのものは持たず、内部に配置した `ColorArea`・`ColorSlider`�
 
 ```tsx
 import {
-  ColorPicker,
+  type Color,
   ColorArea,
-  ColorSlider,
   ColorField,
+  ColorPicker,
+  type ColorPickerProps,
+  ColorSlider,
+  type ColorSpace,
   ColorSwatch,
   ColorSwatchPicker,
   ColorSwatchPickerItem,
   ColorWheel,
-  parseColor,
   getColorChannels,
-  type ColorPickerProps,
-  type Color,
-  type ColorSpace,
+  parseColor,
 } from 'react-aria-components';
 ```
 
 ## 主要 props（ColorPicker）
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `value` | `string \| Color` | — | 現在のカラー値（制御） |
-| `defaultValue` | `string \| Color` | — | 初期カラー値（非制御） |
-| `onChange` | `(value: Color) => void` | — | 値変更ハンドラ（常に `Color` オブジェクトで返る） |
-| `children` | `ReactNode \| (renderProps) => ReactNode` | — | 子コンポーネント群 |
-| `slot` | `string \| null` | — | スロット名 |
+| prop           | 型                                        | デフォルト | 説明                                              |
+| -------------- | ----------------------------------------- | ---------- | ------------------------------------------------- |
+| `value`        | `string \| Color`                         | —          | 現在のカラー値（制御）                            |
+| `defaultValue` | `string \| Color`                         | —          | 初期カラー値（非制御）                            |
+| `onChange`     | `(value: Color) => void`                  | —          | 値変更ハンドラ（常に `Color` オブジェクトで返る） |
+| `children`     | `ReactNode \| (renderProps) => ReactNode` | —          | 子コンポーネント群                                |
+| `slot`         | `string \| null`                          | —          | スロット名                                        |
 
 **注意**: 値の文字列入力（`"#ff0000"` 等）は自動で `Color` オブジェクトに変換される。`onChange` は常に `Color` オブジェクトを返す。
 
 ## 関連コンポーネントの概要
 
 ### ColorArea
+
 2次元のグラデーション上でSaturation/Brightnessを調整する2Dエリア。
+
 ```tsx
 <ColorArea colorSpace="hsb" xChannel="saturation" yChannel="brightness" />
 ```
 
 ### ColorSlider
+
 単一チャンネルをスライダーで調整。
+
 ```tsx
 <ColorSlider colorSpace="hsb" channel="hue" />
 <ColorSlider channel="alpha" />  // アルファチャンネル
 ```
 
 ### ColorField
+
 テキスト入力でカラー値（16進数 or チャンネル値）を編集。
+
 ```tsx
 <ColorField label="Hex" />
 <ColorField colorSpace="rgb" channel="red" label="R" />
 ```
 
 ### ColorSwatchPicker
+
 プリセットカラーのスウォッチ一覧から選択。
+
 ```tsx
 <ColorSwatchPicker>
   <ColorSwatchPickerItem color="#A00" />
@@ -83,17 +91,19 @@ import {
 ```
 
 ### ColorWheel
+
 HSL/HSB の Hue を円形トラックで調整。
+
 ```tsx
 <ColorWheel />
 ```
 
 ## ユーティリティ
 
-| 関数 | 用途 |
-|-----|------|
-| `parseColor('hsl(50, 100%, 50%)')` | 文字列 → `Color` オブジェクト変換 |
-| `getColorChannels('rgb')` | カラースペースのチャンネル名配列を取得 |
+| 関数                               | 用途                                   |
+| ---------------------------------- | -------------------------------------- |
+| `parseColor('hsl(50, 100%, 50%)')` | 文字列 → `Color` オブジェクト変換      |
+| `getColorChannels('rgb')`          | カラースペースのチャンネル名配列を取得 |
 
 ## kz-shared-ui 実装方針メモ
 
@@ -105,11 +115,7 @@ ColorPicker は MyYomuMoji の「よむもじ」カラー選択機能に対応�
 #### オプション A: 完全ラッパー（シンプルな UI 固定）
 
 ```tsx
-<ColorPicker
-  label="文字色"
-  defaultValue="#000000"
-  onChange={setColor}
-/>
+<ColorPicker label="文字色" defaultValue="#000000" onChange={setColor} />
 ```
 
 内部に ColorArea + ColorSlider（Hue） + ColorField（Hex）を固定配置。
@@ -154,13 +160,18 @@ MyYomuMoji のニーズを確認してから選択する。
 ```tsx
 const [space, setSpace] = useState<ColorSpace>('rgb');
 
-<Select selectedKey={space} onSelectionChange={s => setSpace(s as ColorSpace)}>
+<Select
+  selectedKey={space}
+  onSelectionChange={(s) => setSpace(s as ColorSpace)}
+>
   <SelectItem id="rgb">RGB</SelectItem>
   <SelectItem id="hsl">HSL</SelectItem>
-</Select>
-{getColorChannels(space).map(channel => (
-  <ColorSlider key={channel} colorSpace={space} channel={channel} />
-))}
+</Select>;
+{
+  getColorChannels(space).map((channel) => (
+    <ColorSlider key={channel} colorSpace={space} channel={channel} />
+  ));
+}
 ```
 
 ### 注意点

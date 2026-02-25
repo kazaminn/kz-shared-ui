@@ -27,73 +27,76 @@
 
 ```tsx
 import {
-  Select,
-  SelectValue,
-  Label,
   Button,
-  Popover,
+  FieldError,
+  type Key,
+  Label,
   ListBox,
   ListBoxItem,
-  Text,
-  FieldError,
+  Popover,
+  Select,
   type SelectProps,
-  type Key,
+  SelectValue,
+  Text,
 } from 'react-aria-components';
 ```
 
 ## 主要 props（Select）
 
-| prop | 型 | デフォルト | 説明 |
-|------|----|-----------|------|
-| `selectedKey` | `Key \| null` | — | 選択中のキー（制御） |
-| `defaultSelectedKey` | `Key` | — | 初期選択キー（非制御） |
-| `value` | `ValueType<M>` | — | 現在の値（制御） |
-| `defaultValue` | `ValueType<M>` | — | 初期値（非制御） |
-| `onChange` | `(value: ValueType<M>) => void` | — | 値変更ハンドラ |
-| `onSelectionChange` | `(key: Key \| null) => void` | — | 選択キー変更ハンドラ |
-| `isOpen` | `boolean` | — | 開閉状態（制御） |
-| `defaultOpen` | `boolean` | — | 初期開閉状態（非制御） |
-| `onOpenChange` | `(isOpen: boolean) => void` | — | 開閉変化ハンドラ |
-| `isDisabled` | `boolean` | — | 無効化 |
-| `isInvalid` | `boolean` | — | バリデーションエラー状態 |
-| `isRequired` | `boolean` | — | 必須 |
-| `name` | `string` | — | フォーム送信時の名前 |
-| `placeholder` | `string` | `'Select an item'`（ローカライズ済み） | 未選択時のプレースホルダ |
-| `disabledKeys` | `Iterable<Key>` | — | 無効にするアイテムのキー |
-| `selectionMode` | `'single' \| 'multiple'` | `'single'` | 選択モード |
-| `autoComplete` | `string` | — | オートコンプリート |
-| `validate` | `(value) => ValidationError \| null` | — | カスタムバリデーション |
-| `validationBehavior` | `'native' \| 'aria'` | `'native'` | バリデーション方式 |
-| `onFocus` / `onBlur` / `onFocusChange` | — | — | フォーカスイベント |
-| `onKeyDown` / `onKeyUp` | — | — | キーイベント |
+| prop                                   | 型                                   | デフォルト                             | 説明                     |
+| -------------------------------------- | ------------------------------------ | -------------------------------------- | ------------------------ |
+| `selectedKey`                          | `Key \| null`                        | —                                      | 選択中のキー（制御）     |
+| `defaultSelectedKey`                   | `Key`                                | —                                      | 初期選択キー（非制御）   |
+| `value`                                | `ValueType<M>`                       | —                                      | 現在の値（制御）         |
+| `defaultValue`                         | `ValueType<M>`                       | —                                      | 初期値（非制御）         |
+| `onChange`                             | `(value: ValueType<M>) => void`      | —                                      | 値変更ハンドラ           |
+| `onSelectionChange`                    | `(key: Key \| null) => void`         | —                                      | 選択キー変更ハンドラ     |
+| `isOpen`                               | `boolean`                            | —                                      | 開閉状態（制御）         |
+| `defaultOpen`                          | `boolean`                            | —                                      | 初期開閉状態（非制御）   |
+| `onOpenChange`                         | `(isOpen: boolean) => void`          | —                                      | 開閉変化ハンドラ         |
+| `isDisabled`                           | `boolean`                            | —                                      | 無効化                   |
+| `isInvalid`                            | `boolean`                            | —                                      | バリデーションエラー状態 |
+| `isRequired`                           | `boolean`                            | —                                      | 必須                     |
+| `name`                                 | `string`                             | —                                      | フォーム送信時の名前     |
+| `placeholder`                          | `string`                             | `'Select an item'`（ローカライズ済み） | 未選択時のプレースホルダ |
+| `disabledKeys`                         | `Iterable<Key>`                      | —                                      | 無効にするアイテムのキー |
+| `selectionMode`                        | `'single' \| 'multiple'`             | `'single'`                             | 選択モード               |
+| `autoComplete`                         | `string`                             | —                                      | オートコンプリート       |
+| `validate`                             | `(value) => ValidationError \| null` | —                                      | カスタムバリデーション   |
+| `validationBehavior`                   | `'native' \| 'aria'`                 | `'native'`                             | バリデーション方式       |
+| `onFocus` / `onBlur` / `onFocusChange` | —                                    | —                                      | フォーカスイベント       |
+| `onKeyDown` / `onKeyUp`                | —                                    | —                                      | キーイベント             |
 
 ## 状態セレクタ（tailwindcss-react-aria-components）
 
 `Select` ルート・`Button`・`ListBoxItem` に付与されるデータ属性：
 
 ### Button（トリガー）
-| セレクタ | 条件 |
-|---------|------|
-| `hovered:` | ホバー中 |
-| `pressed:` | プレス中 |
+
+| セレクタ         | 条件                 |
+| ---------------- | -------------------- |
+| `hovered:`       | ホバー中             |
+| `pressed:`       | プレス中             |
 | `focus-visible:` | キーボードフォーカス |
-| `disabled:` | 無効状態 |
+| `disabled:`      | 無効状態             |
 
 ### Select ルート
-| セレクタ | 条件 |
-|---------|------|
-| `open:` | Popover が開いている（`data-open`） |
-| `invalid:` | バリデーションエラー（`data-invalid`） |
-| `disabled:` | 無効状態 |
+
+| セレクタ    | 条件                                   |
+| ----------- | -------------------------------------- |
+| `open:`     | Popover が開いている（`data-open`）    |
+| `invalid:`  | バリデーションエラー（`data-invalid`） |
+| `disabled:` | 無効状態                               |
 
 ### ListBoxItem
-| セレクタ | 条件 |
-|---------|------|
-| `selected:` | 選択中（`data-selected`） |
-| `focused:` | フォーカス中（`data-focused`） |
-| `hovered:` | ホバー中 |
-| `disabled:` | 無効状態 |
-| `focus-visible:` | キーボードフォーカス |
+
+| セレクタ         | 条件                           |
+| ---------------- | ------------------------------ |
+| `selected:`      | 選択中（`data-selected`）      |
+| `focused:`       | フォーカス中（`data-focused`） |
+| `hovered:`       | ホバー中                       |
+| `disabled:`      | 無効状態                       |
+| `focus-visible:` | キーボードフォーカス           |
 
 ## kz-shared-ui 実装方針メモ
 
@@ -116,13 +119,13 @@ Select は複合コンポーネントのため、ラッパーで Button・Popove
 // Button（トリガー）のスタイル
 const triggerStyles = tv({
   base: [
-    'inline-flex items-center justify-between gap-2 w-full',
+    'inline-flex w-full items-center justify-between gap-2',
     'h-10 rounded-md px-3 py-2',
     'border border-input bg-input text-body',
-    'text-base cursor-default',
+    'cursor-default text-base',
     'outline-none',
     'focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2',
-    'disabled:bg-disabled disabled:text-disabled disabled:border-disabled',
+    'disabled:border-disabled disabled:bg-disabled disabled:text-disabled',
     'invalid:border-danger',
     'transition-colors duration-150',
   ],
@@ -132,7 +135,7 @@ const triggerStyles = tv({
 const itemStyles = tv({
   base: [
     'flex items-center gap-2 px-3 py-2',
-    'text-base text-body cursor-default rounded-sm',
+    'cursor-default rounded-sm text-base text-body',
     'outline-none',
     'focus-visible:ring-2 focus-visible:ring-focus-ring',
     'focused:bg-surface',

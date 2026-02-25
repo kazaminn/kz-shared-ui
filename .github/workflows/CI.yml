@@ -30,11 +30,11 @@ jobs:
       # Prettier (Claude branch only)
       # ----------------------------
       - name: Run Prettier (Claude only)
-        if: startsWith(github.head_ref, 'claude/')
+        if: contains(github.head_ref, 'claude/') || contains(github.head_ref, 'codex/')
         run: npm run format
 
       - name: Commit formatted files (Claude only)
-        if: startsWith(github.head_ref, 'claude/')
+        if: contains(github.head_ref, 'claude/') || contains(github.head_ref, 'codex/')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

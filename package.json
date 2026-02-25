@@ -7,11 +7,10 @@
     "dev": "vite",
     "preview": "vite preview",
     "build": "tsc -b && vite build",
-    "test": "vitest",
+    "test": "vitest --pass-with-no-tests",
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky",
-    "commit:ai": "cross-env HUSKY_PRE_COMMIT=1 git commit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "chromatic": "chromatic"

@@ -51,8 +51,8 @@ export const Button: React.FC<ButtonProps> = ({
 }: ButtonProps) => {
   return (
     <AriaButton
-      className={buttonVariants({ variant, size, className })}
       {...props}
+      className={buttonVariants({ variant, size, className })}
     />
   );
 };

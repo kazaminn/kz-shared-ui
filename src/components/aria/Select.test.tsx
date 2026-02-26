@@ -79,7 +79,10 @@ describe('Select', () => {
         <SelectItem id="cat">Cat</SelectItem>
       </Select>
     );
-    expect(screen.getByText('Choose your favorite animal')).toBeInTheDocument();
+    // react-aria duplicates description into a <template> element internally,
+    // so getAllByText is used to handle multiple matches
+    const [description] = screen.getAllByText('Choose your favorite animal');
+    expect(description).toBeInTheDocument();
   });
 
   it('shows error message when isInvalid', () => {

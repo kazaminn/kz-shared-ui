@@ -2,10 +2,10 @@ import {
   ColorSwatch as AriaColorSwatch,
   type ColorSwatchProps as AriaColorSwatchProps,
 } from 'react-aria-components';
-import { type VariantProps, tv } from '@/lib/tv';
+import { type VariantProps, composeProps, tv } from '@/lib/tv';
 
 const colorSwatchStyles = tv({
-  base: ['rounded-md', 'border border-black/10', 'shadow-sm'],
+  base: ['rounded-md', 'border-secondary', 'shadow-sm'],
   variants: {
     size: {
       sm: 'h-6 w-6',
@@ -31,17 +31,20 @@ export type ColorSwatchProps = AriaColorSwatchProps &
 export const ColorSwatch: React.FC<ColorSwatchProps> = ({
   size,
   shape,
-  className,
+  className: classNameProp,
   ...props
 }: ColorSwatchProps) => {
   return (
     <AriaColorSwatch
-      className={colorSwatchStyles({ size, shape, className })}
+      {...props}
+      className={composeProps(
+        classNameProp,
+        colorSwatchStyles({ size, shape })
+      )}
       style={({ color }) => ({
         background: `linear-gradient(${color.toString('css')}, ${color.toString('css')}),
           repeating-conic-gradient(#CCC 0% 25%, white 0% 50%) 50% / 16px 16px`,
       })}
-      {...props}
     />
   );
 };

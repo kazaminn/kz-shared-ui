@@ -5,7 +5,7 @@ import { ColorSwatch } from './ColorSwatch';
 
 describe('ColorSwatch', () => {
   it('renders with a color', () => {
-    render(<ColorSwatch color="#ff0000" aria-label="Red" />);
+    render(<ColorSwatch color="#ff0000" colorName="Red" />);
     expect(screen.getByRole('img', { name: 'Red' })).toBeInTheDocument();
   });
 
@@ -43,7 +43,7 @@ describe('ColorSwatch', () => {
 
   it('has no accessibility violations', async () => {
     const { container } = render(
-      <ColorSwatch color="#ff0000" aria-label="Red color" />
+      <ColorSwatch color="#ff0000" aria-label="Color" colorName="Red color" />
     );
     const results = await axe.run(container);
     expect(results.violations).toHaveLength(0);

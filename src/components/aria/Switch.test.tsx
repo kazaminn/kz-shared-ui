@@ -25,14 +25,14 @@ describe('Switch', () => {
   it('applies bg-disabled on track when not selected', () => {
     render(<Switch>Toggle</Switch>);
     const label = screen.getByRole('switch').closest('label');
-    const track = label?.querySelector('span');
+    const track = label?.querySelector('div');
     expect(track).toHaveClass('bg-disabled');
   });
 
   it('applies bg-primary on track when selected', () => {
     render(<Switch defaultSelected>Toggle</Switch>);
     const label = screen.getByRole('switch').closest('label');
-    const track = label?.querySelector('span');
+    const track = label?.querySelector('div');
     expect(track).toHaveClass('bg-primary');
   });
 

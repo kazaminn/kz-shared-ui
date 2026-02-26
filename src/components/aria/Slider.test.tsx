@@ -22,7 +22,8 @@ describe('Slider', () => {
   it('applies default value', () => {
     render(<Slider label="Volume" defaultValue={30} />);
     const slider = screen.getByRole('slider');
-    expect(slider).toHaveAttribute('aria-valuenow', '30');
+    // SliderThumb renders as <input type="range">; value is set via native attribute
+    expect(slider).toHaveAttribute('value', '30');
   });
 
   it('respects minValue and maxValue', () => {
@@ -35,8 +36,9 @@ describe('Slider', () => {
       />
     );
     const slider = screen.getByRole('slider');
-    expect(slider).toHaveAttribute('aria-valuemin', '0');
-    expect(slider).toHaveAttribute('aria-valuemax', '200');
+    // SliderThumb renders as <input type="range">; min/max are native attributes
+    expect(slider).toHaveAttribute('min', '0');
+    expect(slider).toHaveAttribute('max', '200');
   });
 
   it('is disabled when isDisabled is true', () => {

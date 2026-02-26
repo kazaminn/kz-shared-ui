@@ -2,7 +2,7 @@ import {
   Switch as AriaSwitch,
   type SwitchProps as AriaSwitchProps,
 } from 'react-aria-components';
-import { tv } from '@/lib/tv';
+import { composeProps, tv } from '@/lib/tv';
 
 const switchRootStyles = tv({
   base: [
@@ -17,7 +17,7 @@ const trackStyles = tv({
     'inline-flex h-6 w-11 shrink-0 items-center rounded-full px-0.5',
     'border border-transparent',
     'transition-colors duration-200',
-    'group-data-[focus-visible]:ring-2 group-data-[focus-visible]:ring-focus-ring group-data-[focus-visible]:ring-offset-2',
+    'group-data-focus-visible:ring-2 group-data-focus-visible:ring-focus-ring group-data-focus-visible:ring-offset-2',
   ],
   variants: {
     isSelected: {
@@ -53,16 +53,19 @@ export type SwitchProps = Omit<AriaSwitchProps, 'children'> & {
 
 export const Switch: React.FC<SwitchProps> = ({
   children,
-  className,
+  className: classNameProp,
   ...props
 }: SwitchProps) => {
   return (
-    <AriaSwitch className={switchRootStyles({ className })} {...props}>
-      {({ isSelected }) => (
+    <AriaSwitch
+      {...props}
+      className={composeProps(classNameProp, switchRootStyles())}
+    >
+      {(renderProps) => (
         <>
-          <span className={trackStyles({ isSelected })}>
-            <span className={handleStyles({ isSelected })} />
-          </span>
+          <div className={trackStyles(renderProps)}>
+            <span className={handleStyles(renderProps)} />
+          </div>
           {children}
         </>
       )}

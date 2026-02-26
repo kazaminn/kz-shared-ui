@@ -6,7 +6,7 @@ import {
   SliderThumb,
   SliderTrack,
 } from 'react-aria-components';
-import { tv } from '@/lib/tv';
+import { composeProps, tv } from '@/lib/tv';
 
 const sliderStyles = tv({
   slots: {
@@ -53,7 +53,7 @@ export type SliderProps<T extends number | number[] = number> =
 export function Slider<T extends number | number[] = number>({
   label,
   thumbLabels,
-  className,
+  className: classNameProp,
   ...props
 }: SliderProps<T>) {
   const {
@@ -68,7 +68,7 @@ export function Slider<T extends number | number[] = number>({
   } = sliderStyles();
 
   return (
-    <AriaSlider className={root({ class: className })} {...props}>
+    <AriaSlider className={composeProps(classNameProp, root())} {...props}>
       <div className={header()}>
         {label && <Label className={labelClass()}>{label}</Label>}
         <SliderOutput className={output()} />

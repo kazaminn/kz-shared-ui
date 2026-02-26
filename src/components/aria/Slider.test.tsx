@@ -47,11 +47,12 @@ describe('Slider', () => {
   });
 
   it('applies thumb classes', () => {
-    render(<Slider label="Volume" defaultValue={50} />);
-    const slider = screen.getByRole('slider');
-    // The thumb element wraps the input; find the div with thumb styles
-    const thumbEl = slider.closest('[class*="rounded-full"]');
+    const { container } = render(<Slider label="Volume" defaultValue={50} />);
+    const thumbEl = container.querySelector(
+      'div[class*="focus-visible:ring-focus-ring"]'
+    );
     expect(thumbEl).toHaveClass('bg-primary');
+    expect(thumbEl).toHaveClass('focus-visible:ring-focus-ring');
   });
 
   it('calls onChange while dragging', () => {
@@ -71,6 +72,27 @@ describe('Slider', () => {
     );
     const sliders = screen.getAllByRole('slider');
     expect(sliders).toHaveLength(2);
+  });
+
+  it('renders output using thumb value labels for range', () => {
+    render(
+      <Slider
+        label="Price range"
+        defaultValue={[20, 80]}
+        thumbLabels={['min', 'max']}
+      />
+    );
+    expect(screen.getByText('20 – 80')).toBeInTheDocument();
+  });
+
+  it('applies disabled styles to track fill and background', () => {
+    const { container } = render(
+      <Slider label="Volume" defaultValue={50} isDisabled />
+    );
+    const fill = container.querySelector('div[style*="--size"]');
+    const background = container.querySelector('div.bg-disabled.opacity-70');
+    expect(fill).toHaveClass('bg-disabled');
+    expect(background).toBeInTheDocument();
   });
 
   it('has no accessibility violations', async () => {

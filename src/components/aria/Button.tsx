@@ -1,58 +1,113 @@
 import {
-  Button as AriaButton,
-  type ButtonProps as AriaButtonProps,
+  type ButtonRenderProps,
+  Button as RACButton,
+  type ButtonProps as RACButtonProps,
 } from 'react-aria-components';
-import { type VariantProps, tv } from '@/lib/tv';
+import { composeProps, tv } from '@/lib/tv';
+import { focusRing } from '@/lib/variants';
 
-const buttonVariants = tv({
-  base: [
-    'inline-flex items-center justify-center gap-2',
-    'rounded-md font-medium',
-    'transition-colors duration-150',
-    'outline-none',
-    'cursor-pointer',
-    'focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2',
-    'disabled:pointer-events-none disabled:opacity-50',
-    'select-none',
-  ],
+export interface ButtonProps extends RACButtonProps {
+  /** @default 'primary' */
+  variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'quiet';
+}
+
+const button = tv({
+  extend: focusRing,
+  base: 'relative box-border inline-flex h-9 cursor-default items-center justify-center gap-2 rounded-lg border border-transparent px-3.5 py-0 text-center font-sans text-sm transition [-webkit-tap-highlight-color:transparent] dark:border-main/10 [&:has(>svg:only-child)]:h-8 [&:has(>svg:only-child)]:w-8 [&:has(>svg:only-child)]:px-0',
   variants: {
     variant: {
       primary:
-        'bg-primary text-primary-foreground hover:bg-primary-hover pressed:bg-primary-hover',
+        'pressed:bg-primary-pressed bg-primary text-white hover:bg-primary-hover',
       secondary:
-        'bg-secondary text-secondary-foreground hover:bg-secondary-hover pressed:bg-secondary-hover',
-      outline: 'border border-main bg-transparent text-body hover:bg-surface',
+        'hover:bg-hover pressed:bg-hover border-main/10 bg-surface text-body',
+      outline: 'hovered:bg-surface border border-main bg-transparent text-body',
       destructive:
-        'bg-danger text-danger-foreground hover:bg-danger-hover pressed:bg-danger-hover',
-      link: 'bg-transparent text-link underline-offset-4 hover:text-link-hover pressed:text-link-active',
+        'pressed:bg-danger-pressed bg-danger-hover text-white hover:bg-danger-hover',
+      quiet:
+        'hover:bg-hover pressed:bg-hover border-0 bg-transparent text-body',
     },
-    size: {
-      sm: 'h-8 px-3 text-sm',
-      md: 'h-10 px-4 text-base',
-      lg: 'h-12 px-6 text-lg',
+    isDisabled: {
+      true: 'border-transparent bg-disabled text-disabled forced-colors:text-[GrayText]',
+    },
+    isPending: {
+      true: 'text-transparent',
     },
   },
   defaultVariants: {
     variant: 'primary',
-    size: 'md',
   },
+  compoundVariants: [
+    {
+      variant: 'quiet',
+      isDisabled: true,
+      class: 'bg-transparent',
+    },
+  ],
 });
 
-export type ButtonProps = AriaButtonProps &
-  VariantProps<typeof buttonVariants> & {
-    className?: string;
+export function Button(props: ButtonProps) {
+  const { children, variant, ...rest } = props;
+
+  const renderContent = (
+    renderProps: ButtonRenderProps & { defaultChildren: React.ReactNode }
+  ) => {
+    const resolved =
+      typeof children === 'function'
+        ? children(renderProps)
+        : (children ?? renderProps.defaultChildren);
+
+    const showSpinner = renderProps.isPending;
+
+    const spinnerStroke =
+      variant === 'secondary' || variant === 'quiet'
+        ? 'light-dark(black, white)'
+        : 'white';
+
+    return (
+      <>
+        {resolved}
+        {showSpinner && (
+          <span
+            aria-hidden
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <svg
+              className="h-4 w-4 animate-spin text-white"
+              viewBox="0 0 24 24"
+              stroke={spinnerStroke}
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                strokeWidth="4"
+                fill="none"
+                className="opacity-25"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                strokeWidth="4"
+                strokeLinecap="round"
+                fill="none"
+                pathLength="100"
+                strokeDasharray="60 140"
+                strokeDashoffset="0"
+              />
+            </svg>
+          </span>
+        )}
+      </>
+    );
   };
 
-export const Button: React.FC<ButtonProps> = ({
-  variant,
-  size,
-  className,
-  ...props
-}: ButtonProps) => {
   return (
-    <AriaButton
-      {...props}
-      className={buttonVariants({ variant, size, className })}
-    />
+    <RACButton
+      {...rest}
+      className={composeProps(props.className, button({ variant }))}
+    >
+      {renderContent}
+    </RACButton>
   );
-};
+}

@@ -1,127 +1,106 @@
 import {
   Slider as AriaSlider,
   type SliderProps as AriaSliderProps,
-  Label,
   SliderOutput,
   SliderThumb,
   SliderTrack,
 } from 'react-aria-components';
+import { Label } from '@/components/aria/Field';
 import { composeProps, tv } from '@/lib/tv';
+import { focusRing } from '@/lib/variants';
 
-const trackBackgroundStyles = tv({
-  base: 'absolute rounded-full',
+const trackStyles = tv({
+  base: 'rounded-full',
   variants: {
     orientation: {
-      horizontal: 'top-1/2 h-1.5 w-full -translate-y-1/2',
-      vertical: 'left-1/2 h-full w-1.5 -translate-x-1/2',
+      horizontal: 'h-1.5 w-full',
+      vertical: 'ml-[50%] h-full w-1.5 -translate-x-[50%]',
     },
     isDisabled: {
-      false: 'bg-disabled',
-      true: 'bg-disabled opacity-70',
+      false: 'bg-disabled dark:bg-surface forced-colors:bg-[ButtonBorder]',
+      true: 'bg-hover dark:bg-surface forced-colors:bg-[ButtonBorder]',
     },
   },
 });
 
-const trackFillStyles = tv({
+const fillStyles = tv({
   base: 'absolute rounded-full',
   variants: {
     orientation: {
-      horizontal:
-        'inset-s-(--start,0) top-1/2 h-1.5 w-(--size) -translate-y-1/2',
-      vertical: 'bottom-(--start,0) left-1/2 h-(--size) w-1.5 -translate-x-1/2',
+      horizontal: 'inset-s-(--start,0) h-1.5 w-(--size)',
+      vertical:
+        'bottom-(--start,0) ml-[50%] h-(--size) w-1.5 -translate-x-[50%]',
     },
     isDisabled: {
-      false: 'bg-primary',
-      true: 'bg-disabled',
+      false: 'bg-primary forced-colors:bg-[Highlight]',
+      true: 'dark:bg-hover bg-disabled forced-colors:bg-[GrayText]',
     },
   },
 });
 
 const thumbStyles = tv({
-  base: [
-    'h-5 w-5 rounded-full',
-    'group-orientation-horizontal:mt-5 group-orientation-vertical:ml-2.5',
-    'border-2 border-secondary bg-primary',
-    'shadow-sm outline-none',
-    'focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2',
-    'transition-transform duration-100',
-  ],
+  extend: focusRing,
+  base: 'h-4.5 w-4.5 rounded-full border border-main bg-surface group-orientation-horizontal:mt-5 group-orientation-vertical:ml-2.5 dark:border-main dark:bg-base',
   variants: {
     isDragging: {
-      true: 'scale-110 cursor-pointer',
-      false: 'cursor-pointer',
+      true: 'dark:bg-hover bg-surface forced-colors:bg-[ButtonBorder]',
     },
     isDisabled: {
-      true: 'cursor-not-allowed border-disabled bg-disabled',
+      true: 'border-main dark:border-main forced-colors:border-[GrayText]',
     },
   },
 });
 
-const sliderStyles = tv({
-  slots: {
-    root: [
-      'w-full gap-2',
-      'orientation-horizontal:grid orientation-horizontal:grid-cols-[1fr_auto]',
-      'orientation-vertical:flex orientation-vertical:flex-col orientation-vertical:items-center',
-    ],
-    label: 'text-sm font-medium text-body',
-    output: 'text-sm text-muted tabular-nums orientation-vertical:hidden',
-    track: [
-      'group flex items-center',
-      'orientation-horizontal:col-span-2',
-      'orientation-horizontal:h-5 orientation-horizontal:w-full',
-      'orientation-vertical:h-40 orientation-vertical:w-5',
-      'disabled:cursor-not-allowed',
-    ],
-  },
-});
+export interface SliderProps<T> extends AriaSliderProps<T> {
+  label?: string;
+  thumbLabels?: string[];
+}
 
-export type SliderProps<T extends number | number[] = number> =
-  AriaSliderProps<T> & {
-    label?: string;
-    thumbLabels?: string[];
-    className?: string;
-  };
-
-export function Slider<T extends number | number[] = number>({
+export function Slider<T extends number | number[]>({
   label,
   thumbLabels,
-  className: classNameProp,
   ...props
 }: SliderProps<T>) {
-  const { root, label: labelClass, output, track } = sliderStyles();
-
   return (
-    <AriaSlider className={composeProps(classNameProp, root())} {...props}>
-      {label && <Label className={labelClass()}>{label}</Label>}
-      <SliderOutput className={output()}>
+    <AriaSlider
+      {...props}
+      className={composeProps(
+        props.className,
+        'grid-cols-[1fr_auto] flex-col items-center gap-2 font-sans orientation-horizontal:grid orientation-horizontal:w-64 orientation-horizontal:max-w-[calc(100%-10px)] orientation-vertical:flex'
+      )}
+    >
+      <Label>{label}</Label>
+      <SliderOutput className="dark:text-subtle text-sm text-muted orientation-vertical:hidden">
         {({ state }) =>
           state.values.map((_, i) => state.getThumbValueLabel(i)).join(' – ')
         }
       </SliderOutput>
-      <SliderTrack className={track()}>
-        {({ state, orientation, isDisabled }) => (
+      <SliderTrack className="group col-span-2 flex items-center orientation-horizontal:h-5 orientation-vertical:h-38 orientation-vertical:w-5">
+        {({ state, ...renderProps }) => (
           <>
-            <div
-              className={trackBackgroundStyles({ orientation, isDisabled })}
-            />
+            <div className={trackStyles(renderProps)} />
             {state.values.length === 1 ? (
+              // Single thumb, render fill from the end
               <div
-                className={trackFillStyles({ orientation, isDisabled })}
+                className={fillStyles(renderProps)}
                 style={
-                  {
-                    '--size': `${state.getThumbPercent(0) * 100}%`,
-                  } as React.CSSProperties
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  { '--size': state.getThumbPercent(0) * 100 + '%' } as any
                 }
               />
             ) : state.values.length === 2 ? (
+              // Range slider, render fill between the thumbs
               <div
-                className={trackFillStyles({ orientation, isDisabled })}
+                className={fillStyles(renderProps)}
                 style={
                   {
-                    '--start': `${state.getThumbPercent(0) * 100}%`,
-                    '--size': `${(state.getThumbPercent(1) - state.getThumbPercent(0)) * 100}%`,
-                  } as React.CSSProperties
+                    '--start': state.getThumbPercent(0) * 100 + '%',
+                    '--size':
+                      (state.getThumbPercent(1) - state.getThumbPercent(0)) *
+                        100 +
+                      '%',
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  } as any
                 }
               />
             ) : null}
@@ -129,8 +108,8 @@ export function Slider<T extends number | number[] = number>({
               <SliderThumb
                 key={i}
                 index={i}
-                className={thumbStyles}
                 aria-label={thumbLabels?.[i]}
+                className={thumbStyles}
               />
             ))}
           </>

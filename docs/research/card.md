@@ -50,8 +50,9 @@ import {
 ライブラリ内部では：
 
 ```tsx
-// src/components/ui/Card/Card.tsx
-// src/components/ui/Card/index.ts
+// src/components/ui/Card.tsx
+// src/components/ui/Card.test.tsx
+// src/components/ui/Card.stories.tsx
 ```
 
 ---

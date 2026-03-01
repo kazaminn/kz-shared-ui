@@ -1,74 +1,72 @@
+import React from 'react';
 import {
   Switch as AriaSwitch,
   type SwitchProps as AriaSwitchProps,
 } from 'react-aria-components';
 import { composeProps, tv } from '@/lib/tv';
+import { focusRing } from '@/lib/variants';
 
-const switchRootStyles = tv({
-  base: [
-    'group inline-flex cursor-default items-center gap-3 select-none',
-    'text-sm font-medium text-body',
-    'disabled:cursor-not-allowed disabled:opacity-50',
-  ],
-});
-
-const trackStyles = tv({
-  base: [
-    'inline-flex h-6 w-11 shrink-0 items-center rounded-full px-0.5',
-    'border border-transparent',
-    'transition-colors duration-200',
-    'group-data-focus-visible:ring-2 group-data-focus-visible:ring-focus-ring group-data-focus-visible:ring-offset-2',
-  ],
-  variants: {
-    isSelected: {
-      false: 'bg-disabled',
-      true: 'bg-primary',
-    },
-  },
-  defaultVariants: {
-    isSelected: false,
-  },
-});
-
-const handleStyles = tv({
-  base: [
-    'block h-5 w-5 rounded-full bg-white shadow-sm',
-    'transition-transform duration-200',
-  ],
-  variants: {
-    isSelected: {
-      false: 'translate-x-0',
-      true: 'translate-x-5',
-    },
-  },
-  defaultVariants: {
-    isSelected: false,
-  },
-});
-
-export type SwitchProps = Omit<AriaSwitchProps, 'children'> & {
+export interface SwitchProps extends Omit<AriaSwitchProps, 'children'> {
   children: React.ReactNode;
-  className?: string;
-};
+}
 
-export const Switch: React.FC<SwitchProps> = ({
-  children,
-  className: classNameProp,
-  ...props
-}: SwitchProps) => {
+const track = tv({
+  extend: focusRing,
+  base: 'box-border flex h-5 w-9 shrink-0 cursor-default items-center rounded-full border border-transparent px-px font-sans shadow-inner transition duration-200 ease-in-out',
+  variants: {
+    isSelected: {
+      false:
+        'bg-hover group-pressed:bg-hover dark:group-pressed:bg-hover border-main dark:border-main dark:bg-surface',
+      true: 'dark:bg-hover dark:group-pressed:bg-hover bg-surface group-pressed:bg-surface forced-colors:bg-[Highlight]!',
+    },
+    isDisabled: {
+      true: 'bg-hover dark:group-selected:bg-selected border-main group-selected:bg-disabled dark:border-main dark:bg-surface forced-colors:border-[GrayText] forced-colors:group-selected:bg-[GrayText]!',
+    },
+  },
+});
+
+const handle = tv({
+  base: 'h-4 w-4 transform rounded-full shadow-xs outline-1 -outline-offset-1 outline-transparent transition duration-200 ease-in-out',
+  variants: {
+    isSelected: {
+      false: 'dark:bg-hover translate-x-0 bg-base',
+      true: 'translate-x-full bg-base dark:bg-base',
+    },
+    isDisabled: {
+      true: 'forced-colors:outline-[GrayText]',
+    },
+  },
+  compoundVariants: [
+    {
+      isSelected: false,
+      isDisabled: true,
+      class: 'bg-disabled dark:bg-surface',
+    },
+    {
+      isSelected: true,
+      isDisabled: true,
+      class: 'bg-surface dark:bg-surface',
+    },
+  ],
+});
+
+export function Switch({ children, ...props }: SwitchProps) {
   return (
     <AriaSwitch
       {...props}
-      className={composeProps(classNameProp, switchRootStyles())}
+      className={composeProps(
+        props.className,
+        'group relative flex items-center gap-2 text-sm text-body transition [-webkit-tap-highlight-color:transparent] disabled:text-disabled dark:text-body dark:disabled:text-disabled forced-colors:disabled:text-[GrayText]'
+      )}
     >
       {(renderProps) => (
         <>
-          <div className={trackStyles(renderProps)}>
-            <span className={handleStyles(renderProps)} />
+          <div className={track(renderProps)}>
+            <span className={handle(renderProps)} />
           </div>
           {children}
         </>
       )}
     </AriaSwitch>
   );
-};
+}

@@ -1,50 +1,21 @@
 import {
   ColorSwatch as AriaColorSwatch,
-  type ColorSwatchProps as AriaColorSwatchProps,
+  type ColorSwatchProps,
 } from 'react-aria-components';
-import { type VariantProps, composeProps, tv } from '@/lib/tv';
+import { composeProps } from '@/lib/tv';
 
-const colorSwatchStyles = tv({
-  base: ['rounded-md', 'border-secondary', 'shadow-sm'],
-  variants: {
-    size: {
-      sm: 'h-6 w-6',
-      md: 'h-8 w-8',
-      lg: 'h-10 w-10',
-    },
-    shape: {
-      square: 'rounded-md',
-      circle: 'rounded-full',
-    },
-  },
-  defaultVariants: {
-    size: 'md',
-    shape: 'square',
-  },
-});
-
-export type ColorSwatchProps = AriaColorSwatchProps &
-  VariantProps<typeof colorSwatchStyles> & {
-    className?: string;
-  };
-
-export const ColorSwatch: React.FC<ColorSwatchProps> = ({
-  size,
-  shape,
-  className: classNameProp,
-  ...props
-}: ColorSwatchProps) => {
+export function ColorSwatch(props: ColorSwatchProps) {
   return (
     <AriaColorSwatch
       {...props}
       className={composeProps(
-        classNameProp,
-        colorSwatchStyles({ size, shape })
+        props.className,
+        'box-border h-8 w-8 rounded-md border border-main/10'
       )}
       style={({ color }) => ({
-        background: `linear-gradient(${color.toString('css')}, ${color.toString('css')}),
+        background: `linear-gradient(${color.toString()}, ${color.toString()}),
           repeating-conic-gradient(#CCC 0% 25%, white 0% 50%) 50% / 16px 16px`,
       })}
     />
   );
-};
+}

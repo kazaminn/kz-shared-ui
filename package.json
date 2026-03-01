@@ -9,6 +9,7 @@
     "build": "tsc -b && vite build",
     "test": "vitest --pass-with-no-tests",
     "lint": "eslint .",
+    "typecheck": "tsc --noemit",
     "format": "prettier --write .",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",

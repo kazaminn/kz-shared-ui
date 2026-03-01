@@ -1,105 +1,116 @@
 import {
-  Tab as AriaTab,
-  TabList as AriaTabList,
-  type TabListProps as AriaTabListProps,
-  TabPanel as AriaTabPanel,
-  type TabPanelProps as AriaTabPanelProps,
-  type TabProps as AriaTabProps,
-  Tabs as AriaTabs,
-  type TabsProps as AriaTabsProps,
+  Tab as RACTab,
+  TabList as RACTabList,
+  TabPanel as RACTabPanel,
+  TabPanels as RACTabPanels,
+  Tabs as RACTabs,
+  SelectionIndicator,
+  type TabListProps,
+  type TabPanelProps,
+  type TabPanelsProps,
+  type TabProps,
+  type TabRenderProps,
+  type TabsProps,
 } from 'react-aria-components';
-import { tv } from '@/lib/tv';
+import { composeProps, tv } from '@/lib/tv';
+import { focusRing } from '@/lib/variants';
 
 const tabsStyles = tv({
-  base: 'flex',
+  base: 'flex max-w-full gap-4 font-sans',
   variants: {
     orientation: {
       horizontal: 'flex-col',
-      vertical: 'flex-row gap-4',
+      vertical: 'flex-row',
     },
   },
-  defaultVariants: {
-    orientation: 'horizontal',
-  },
 });
 
-const tabListStyles = tv({
-  base: 'flex',
-  variants: {
-    orientation: {
-      horizontal: 'flex-row border-b border-main',
-      vertical: 'flex-col border-r border-main',
-    },
-  },
-  defaultVariants: {
-    orientation: 'horizontal',
-  },
-});
-
-const tabStyles = tv({
-  base: [
-    'cursor-default px-4 py-2 text-sm font-medium',
-    'outline-none',
-    '-mb-px border-b-2 border-transparent',
-    'text-muted transition-colors duration-150',
-    'focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-inset',
-    'hover:text-body',
-    'selected:text-primary selected:border-primary',
-    'disabled:cursor-not-allowed disabled:text-disabled',
-  ],
-});
-
-const tabPanelStyles = tv({
-  base: [
-    'pt-4 outline-none',
-    'focus-visible:ring-2 focus-visible:ring-focus-ring',
-  ],
-});
-
-export type TabsProps = AriaTabsProps & {
-  className?: string;
-};
-
-export const Tabs: React.FC<TabsProps> = ({
-  className,
-  orientation = 'horizontal',
-  ...props
-}: TabsProps) => {
+export function Tabs(props: TabsProps) {
   return (
-    <AriaTabs
-      className={tabsStyles({ orientation, className })}
-      orientation={orientation}
+    <RACTabs
       {...props}
+      className={composeProps(props.className, tabsStyles())}
     />
   );
-};
-
-export type TabListProps<T extends object = object> = AriaTabListProps<T> & {
-  className?: string;
-};
-
-export function TabList<T extends object = object>({
-  className,
-  ...props
-}: TabListProps<T>) {
-  return <AriaTabList className={tabListStyles({ className })} {...props} />;
 }
 
-export type TabProps = AriaTabProps & {
-  className?: string;
-};
+const tabListStyles = tv({
+  base: '-m-1 flex max-w-full overflow-x-auto overflow-y-clip p-1 [scrollbar-width:none]',
+  variants: {
+    orientation: {
+      horizontal: 'flex-row',
+      vertical: 'flex-col items-start',
+    },
+  },
+});
 
-export const Tab: React.FC<TabProps> = ({ className, ...props }: TabProps) => {
-  return <AriaTab className={tabStyles({ className })} {...props} />;
-};
+export function TabList<T extends object>(props: TabListProps<T>) {
+  return (
+    <RACTabList
+      {...props}
+      className={composeProps(props.className, tabListStyles())}
+    />
+  );
+}
 
-export type TabPanelProps = AriaTabPanelProps & {
-  className?: string;
-};
+const tabProps = tv({
+  extend: focusRing,
+  base: 'group relative flex cursor-default items-center rounded-full px-3 py-1.5 text-sm font-medium transition forced-color-adjust-none [-webkit-tap-highlight-color:transparent]',
+  variants: {
+    isDisabled: {
+      true: 'selected:bg-selected dark:selected:bg-selected text-disabled dark:text-disabled forced-colors:text-[GrayText] selected:text-white dark:selected:text-muted forced-colors:selected:bg-[GrayText] forced-colors:selected:text-[HighlightText]',
+    },
+  },
+});
 
-export const TabPanel: React.FC<TabPanelProps> = ({
-  className,
-  ...props
-}: TabPanelProps) => {
-  return <AriaTabPanel className={tabPanelStyles({ className })} {...props} />;
-};
+export function Tab(props: TabProps) {
+  const { children, ...rest } = props;
+
+  const renderContent = (
+    renderProps: TabRenderProps & { defaultChildren: React.ReactNode }
+  ) => {
+    const resolved =
+      typeof children === 'function'
+        ? children(renderProps)
+        : (children ?? renderProps.defaultChildren);
+
+    return (
+      <>
+        {resolved}
+        <SelectionIndicator className="group-disabled:dark:bg-hover absolute top-0 left-0 z-10 h-full w-full rounded-full bg-base mix-blend-difference group-disabled:-z-1 group-disabled:bg-disabled group-disabled:mix-blend-normal motion-safe:transition-[translate,width,height]" />
+      </>
+    );
+  };
+
+  return (
+    <RACTab {...rest} className={composeProps(props.className, tabProps())}>
+      {renderContent}
+    </RACTab>
+  );
+}
+
+export function TabPanels<T extends object>(props: TabPanelsProps<T>) {
+  return (
+    <RACTabPanels
+      {...props}
+      className={composeProps(
+        props.className,
+        'relative h-(--tab-panel-height) overflow-clip motion-safe:transition-[height]'
+      )}
+    />
+  );
+}
+
+const tabPanelStyles = tv({
+  extend: focusRing,
+  base: 'text-heading box-border flex-1 p-4 text-sm transition dark:text-body entering:opacity-0 exiting:absolute exiting:top-0 exiting:left-0 exiting:w-full exiting:opacity-0',
+});
+
+export function TabPanel(props: TabPanelProps) {
+  return (
+    <RACTabPanel
+      {...props}
+      className={composeProps(props.className, tabPanelStyles())}
+    />
+  );
+}

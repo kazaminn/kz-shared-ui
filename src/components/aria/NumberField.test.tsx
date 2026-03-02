@@ -1,0 +1,42 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import axe from 'axe-core';
+import { describe, expect, it } from 'vitest';
+import { NumberField } from './NumberField';
+
+describe('NumberField', () => {
+  it('renders spinbutton with associated label', () => {
+    render(<NumberField label="Quantity" defaultValue={1} />);
+
+    expect(screen.getByRole('spinbutton', { name: 'Quantity' })).toBeInTheDocument();
+  });
+
+  it('increments and decrements value with buttons', async () => {
+    const user = userEvent.setup();
+    render(<NumberField label="Quantity" defaultValue={1} />);
+
+    const increment = screen.getByRole('button', { name: 'Increase' });
+    const decrement = screen.getByRole('button', { name: 'Decrease' });
+    const input = screen.getByRole('spinbutton', { name: 'Quantity' });
+
+    await user.click(increment);
+    expect(input).toHaveValue(2);
+
+    await user.click(decrement);
+    expect(input).toHaveValue(1);
+  });
+
+  it('reflects disabled state', () => {
+    render(<NumberField label="Quantity" isDisabled defaultValue={1} />);
+
+    expect(screen.getByRole('spinbutton', { name: 'Quantity' })).toBeDisabled();
+  });
+
+  it('has no accessibility violations', async () => {
+    const { container } = render(<NumberField label="Quantity" defaultValue={1} />);
+
+    const results = await axe.run(container);
+
+    expect(results.violations).toHaveLength(0);
+  });
+});

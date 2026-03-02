@@ -7,7 +7,7 @@
     "dev": "vite",
     "preview": "vite preview",
     "build": "tsc -b && vite build",
-    "test": "vitest --pass-with-no-tests",
+    "test": "vitest --run",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
@@ -23,7 +23,6 @@
     ],
     "*.{ts,tsx}": [
       "eslint --fix --no-warn-ignored",
-      "tsc --noEmit",
       "prettier --write"
     ],
     "*.{json,md,css,yml}": "prettier --write"
@@ -31,6 +30,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@tailwindcss/vite": "^4.1.18",
+    "lucide-react": "^0.576.0",
     "react": "^19.2.0",
     "react-aria-components": "^1.15.1",
     "react-dom": "^19.2.0",

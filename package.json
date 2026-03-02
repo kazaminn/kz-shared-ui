@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "test": "vitest --pass-with-no-tests",
     "lint": "eslint .",
-    "typecheck": "tsc --noemit",
+    "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
@@ -17,8 +17,13 @@
     "chromatic": "chromatic"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.{js,jsx}": [
       "eslint --fix --no-warn-ignored",
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "eslint --fix --no-warn-ignored",
+      "tsc --noEmit",
       "prettier --write"
     ],
     "*.{json,md,css,yml}": "prettier --write"

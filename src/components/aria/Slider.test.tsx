@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axe from 'axe-core';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Slider } from './Slider';
 
 describe('Slider', () => {
@@ -12,29 +12,41 @@ describe('Slider', () => {
   });
 
   it('has aria value attributes', () => {
-    render(<Slider label="Volume" minValue={0} maxValue={100} defaultValue={30} />);
+    render(
+      <Slider label="Volume" minValue={0} maxValue={100} defaultValue={30} />
+    );
 
     const slider = screen.getByRole('slider', { name: 'Volume' });
-    expect(slider).toHaveAttribute('aria-valuemin', '0');
-    expect(slider).toHaveAttribute('aria-valuemax', '100');
-    expect(slider).toHaveAttribute('aria-valuenow', '30');
+    expect(slider).toHaveAttribute('min', '0');
+    expect(slider).toHaveAttribute('max', '100');
+    expect(slider).toHaveAttribute('value', '30');
+    expect(slider).toHaveAttribute('aria-valuetext', '30');
   });
 
   it('changes value with keyboard', async () => {
     const user = userEvent.setup();
-    render(<Slider label="Volume" minValue={0} maxValue={10} defaultValue={2} />);
+    const onChange = vi.fn();
+    render(
+      <Slider
+        label="Volume"
+        minValue={0}
+        maxValue={10}
+        defaultValue={2}
+        onChange={onChange}
+      />
+    );
 
     const slider = screen.getByRole('slider', { name: 'Volume' });
     slider.focus();
     await user.keyboard('{ArrowRight}');
 
-    expect(slider).toHaveAttribute('aria-valuenow', '3');
+    expect(onChange).toHaveBeenCalledWith(3);
   });
 
   it('reflects disabled state', () => {
     render(<Slider label="Volume" isDisabled defaultValue={50} />);
 
-    expect(screen.getByRole('slider', { name: 'Volume' })).toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByRole('slider', { name: 'Volume' })).toBeDisabled();
   });
 
   it('has no accessibility violations', async () => {

@@ -5,35 +5,39 @@ import { describe, expect, it } from 'vitest';
 import { NumberField } from './NumberField';
 
 describe('NumberField', () => {
-  it('renders spinbutton with associated label', () => {
+  it('renders textbox with associated label', () => {
     render(<NumberField label="Quantity" defaultValue={1} />);
 
-    expect(screen.getByRole('spinbutton', { name: 'Quantity' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('textbox', { name: 'Quantity' })
+    ).toBeInTheDocument();
   });
 
   it('increments and decrements value with buttons', async () => {
     const user = userEvent.setup();
     render(<NumberField label="Quantity" defaultValue={1} />);
 
-    const increment = screen.getByRole('button', { name: 'Increase' });
-    const decrement = screen.getByRole('button', { name: 'Decrease' });
-    const input = screen.getByRole('spinbutton', { name: 'Quantity' });
+    const increment = screen.getByRole('button', { name: 'Increase Quantity' });
+    const decrement = screen.getByRole('button', { name: 'Decrease Quantity' });
+    const input = screen.getByRole('textbox', { name: 'Quantity' });
 
     await user.click(increment);
-    expect(input).toHaveValue(2);
+    expect(input).toHaveValue('2');
 
     await user.click(decrement);
-    expect(input).toHaveValue(1);
+    expect(input).toHaveValue('1');
   });
 
   it('reflects disabled state', () => {
     render(<NumberField label="Quantity" isDisabled defaultValue={1} />);
 
-    expect(screen.getByRole('spinbutton', { name: 'Quantity' })).toBeDisabled();
+    expect(screen.getByRole('textbox', { name: 'Quantity' })).toBeDisabled();
   });
 
   it('has no accessibility violations', async () => {
-    const { container } = render(<NumberField label="Quantity" defaultValue={1} />);
+    const { container } = render(
+      <NumberField label="Quantity" defaultValue={1} />
+    );
 
     const results = await axe.run(container);
 

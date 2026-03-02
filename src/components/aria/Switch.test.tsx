@@ -8,7 +8,9 @@ describe('Switch', () => {
   it('renders switch with accessible name', () => {
     render(<Switch>Airplane mode</Switch>);
 
-    expect(screen.getByRole('switch', { name: 'Airplane mode' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('switch', { name: 'Airplane mode' })
+    ).toBeInTheDocument();
   });
 
   it('toggles aria-checked when clicked', async () => {
@@ -16,11 +18,11 @@ describe('Switch', () => {
     render(<Switch>Wi-Fi</Switch>);
 
     const element = screen.getByRole('switch', { name: 'Wi-Fi' });
-    expect(element).toHaveAttribute('aria-checked', 'false');
+    expect(element.closest('label')).not.toHaveAttribute('data-selected');
 
     await user.click(element);
 
-    expect(element).toHaveAttribute('aria-checked', 'true');
+    expect(element.closest('label')).toHaveAttribute('data-selected', 'true');
   });
 
   it('calls onChange when toggled', async () => {

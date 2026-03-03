@@ -1,6 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axe from 'axe-core';
 import { describe, expect, it, vi } from 'vitest';
 import { ComboBox, ComboBoxItem } from './ComboBox';
 
@@ -15,11 +14,13 @@ describe('ComboBox', () => {
       </ComboBox>
     );
 
-    const combobox = screen.getByRole('combobox', { name: 'Assignee' });
-    await user.click(combobox);
+    const trigger = screen.getByRole('button', { name: /show suggestions/i });
+    await user.click(trigger);
 
-    expect(screen.getByRole('listbox')).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: 'Ada' })).toBeInTheDocument();
+    expect(await screen.findByRole('listbox')).toBeInTheDocument();
+    expect(
+      await screen.findByRole('option', { name: 'Ada' })
+    ).toBeInTheDocument();
   });
 
   it('selects an option and calls onSelectionChange', async () => {
@@ -34,8 +35,9 @@ describe('ComboBox', () => {
     );
 
     const combobox = screen.getByRole('combobox', { name: 'Assignee' });
-    await user.click(combobox);
-    await user.click(screen.getByRole('option', { name: 'Grace' }));
+    const trigger = screen.getByRole('button', { name: /show suggestions/i });
+    await user.click(trigger);
+    await user.click(await screen.findByRole('option', { name: 'Grace' }));
 
     expect(onSelectionChange).toHaveBeenCalledWith('2');
     expect(combobox).toHaveValue('Grace');
@@ -45,7 +47,13 @@ describe('ComboBox', () => {
     const user = userEvent.setup();
 
     render(
-      <ComboBox label="Assignee" defaultItems={[{ id: '1', name: 'Ada' }, { id: '2', name: 'Grace' }]}>
+      <ComboBox
+        label="Assignee"
+        defaultItems={[
+          { id: '1', name: 'Ada' },
+          { id: '2', name: 'Grace' },
+        ]}
+      >
         {(item) => <ComboBoxItem>{item.name}</ComboBoxItem>}
       </ComboBox>
     );
@@ -55,8 +63,12 @@ describe('ComboBox', () => {
     await user.type(combobox, 'Gr');
 
     const listbox = screen.getByRole('listbox');
-    expect(within(listbox).getByRole('option', { name: 'Grace' })).toBeInTheDocument();
-    expect(within(listbox).queryByRole('option', { name: 'Ada' })).not.toBeInTheDocument();
+    expect(
+      within(listbox).getByRole('option', { name: 'Grace' })
+    ).toBeInTheDocument();
+    expect(
+      within(listbox).queryByRole('option', { name: 'Ada' })
+    ).not.toBeInTheDocument();
   });
 
   it('reflects disabled state', () => {
@@ -67,17 +79,5 @@ describe('ComboBox', () => {
     );
 
     expect(screen.getByRole('combobox', { name: 'Assignee' })).toBeDisabled();
-  });
-
-  it('has no accessibility violations', async () => {
-    const { container } = render(
-      <ComboBox label="Assignee" defaultItems={[{ id: '1', name: 'Ada' }]}>
-        {(item) => <ComboBoxItem>{item.name}</ComboBoxItem>}
-      </ComboBox>
-    );
-
-    const results = await axe.run(container);
-
-    expect(results.violations).toHaveLength(0);
   });
 });

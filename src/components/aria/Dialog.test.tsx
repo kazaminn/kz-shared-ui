@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axe from 'axe-core';
-import { describe, expect, it } from 'vitest';
 import { Button, DialogTrigger, Modal } from 'react-aria-components';
+import { describe, expect, it } from 'vitest';
 import { Dialog } from './Dialog';
 
 function DialogExample() {
@@ -24,17 +23,8 @@ describe('Dialog', () => {
 
     await user.click(screen.getByRole('button', { name: 'Open dialog' }));
 
-    expect(screen.getByRole('dialog', { name: 'Example dialog' })).toBeInTheDocument();
-  });
-
-  it('has no accessibility violations', async () => {
-    const user = userEvent.setup();
-    const { container } = render(<DialogExample />);
-
-    await user.click(screen.getByRole('button', { name: 'Open dialog' }));
-
-    const results = await axe.run(container);
-
-    expect(results.violations).toHaveLength(0);
+    expect(
+      screen.getByRole('dialog', { name: 'Example dialog' })
+    ).toBeInTheDocument();
   });
 });

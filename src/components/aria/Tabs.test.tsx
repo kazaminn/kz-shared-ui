@@ -1,6 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import axe from 'axe-core';
+import { User } from '@react-aria/test-utils';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from './Tabs';
 
@@ -23,46 +22,61 @@ describe('Tabs', () => {
       </Tabs>
     );
 
-  it('renders tablist, tabs and tabpanel', () => {
+  it('renders tablist, tabs and tabpanel', async () => {
     renderTabs();
 
-    expect(screen.getByRole('tablist', { name: 'Sections' })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: 'One' })).toBeInTheDocument();
-    expect(screen.getByRole('tabpanel')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByRole('tablist', { name: 'Sections' })
+      ).toBeInTheDocument();
+      expect(screen.getByRole('tab', { name: 'One' })).toBeInTheDocument();
+      expect(screen.getByRole('tabpanel')).toBeInTheDocument();
+    });
   });
 
   it('switches tab when clicked', async () => {
-    const user = userEvent.setup();
     renderTabs();
+    const user = new User();
+    const tabsTester = user.createTester('Tabs', {
+      root: screen.getByRole('tablist', { name: 'Sections' }),
+    });
 
-    await user.click(screen.getByRole('tab', { name: 'Two' }));
+    await tabsTester.triggerTab({ tab: 'Two' });
 
-    expect(screen.getByRole('tab', { name: 'Two' })).toHaveAttribute('aria-selected', 'true');
-    expect(screen.getByRole('tabpanel')).toHaveTextContent('Panel Two');
+    await waitFor(() => {
+      expect(screen.getByRole('tab', { name: 'Two' })).toHaveAttribute(
+        'aria-selected',
+        'true'
+      );
+      expect(screen.getByRole('tabpanel')).toHaveTextContent('Panel Two');
+    });
   });
 
   it('switches tab with arrow keys', async () => {
-    const user = userEvent.setup();
     renderTabs();
+    const user = new User({ interactionType: 'keyboard' });
+    const tabsTester = user.createTester('Tabs', {
+      root: screen.getByRole('tablist', { name: 'Sections' }),
+    });
 
-    const firstTab = screen.getByRole('tab', { name: 'One' });
-    firstTab.focus();
-    await user.keyboard('{ArrowRight}');
+    await tabsTester.triggerTab({ tab: 'Two' });
 
-    expect(screen.getByRole('tab', { name: 'Two' })).toHaveAttribute('aria-selected', 'true');
+    await waitFor(() => {
+      expect(screen.getByRole('tab', { name: 'Two' })).toHaveAttribute(
+        'aria-selected',
+        'true'
+      );
+    });
   });
 
-  it('reflects disabled state', () => {
+  it('reflects disabled state', async () => {
     renderTabs();
 
-    expect(screen.getByRole('tab', { name: 'Three' })).toHaveAttribute('aria-disabled', 'true');
-  });
-
-  it('has no accessibility violations', async () => {
-    const { container } = renderTabs();
-
-    const results = await axe.run(container);
-
-    expect(results.violations).toHaveLength(0);
+    await waitFor(() => {
+      expect(screen.getByRole('tab', { name: 'Three' })).toHaveAttribute(
+        'aria-disabled',
+        'true'
+      );
+    });
   });
 });

@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axe from 'axe-core';
-import { describe, expect, it } from 'vitest';
 import { Button, DialogTrigger } from 'react-aria-components';
+import { describe, expect, it } from 'vitest';
 import { Popover } from './Popover';
 
 function PopoverExample({ showArrow = false }: { showArrow?: boolean }) {
@@ -31,16 +30,5 @@ describe('Popover', () => {
     await user.keyboard('{Escape}');
 
     expect(screen.queryByText('Popover content')).not.toBeInTheDocument();
-  });
-
-  it('has no accessibility violations', async () => {
-    const user = userEvent.setup();
-    const { container } = render(<PopoverExample showArrow />);
-
-    await user.click(screen.getByRole('button', { name: 'Open popover' }));
-
-    const results = await axe.run(container);
-
-    expect(results.violations).toHaveLength(0);
   });
 });

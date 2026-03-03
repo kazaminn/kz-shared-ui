@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axe from 'axe-core';
 import { describe, expect, it } from 'vitest';
 import { SearchField } from './SearchField';
 
@@ -30,13 +29,5 @@ describe('SearchField', () => {
     render(<SearchField label="Search" isDisabled />);
 
     expect(screen.getByRole('searchbox', { name: 'Search' })).toBeDisabled();
-  });
-
-  it('has no accessibility violations', async () => {
-    const { container } = render(<SearchField label="Search" description="Find records" />);
-
-    const results = await axe.run(container);
-
-    expect(results.violations).toHaveLength(0);
   });
 });

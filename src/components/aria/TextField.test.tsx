@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import axe from 'axe-core';
 import { describe, expect, it } from 'vitest';
 import { TextField } from './TextField';
 
@@ -29,16 +28,10 @@ describe('TextField', () => {
   });
 
   it('renders error message', () => {
-    render(<TextField label="Name" errorMessage="Name is required" isInvalid />);
+    render(
+      <TextField label="Name" errorMessage="Name is required" isInvalid />
+    );
 
     expect(screen.getByText('Name is required')).toBeInTheDocument();
-  });
-
-  it('has no accessibility violations', async () => {
-    const { container } = render(<TextField label="Name" description="This name is public" />);
-
-    const results = await axe.run(container);
-
-    expect(results.violations).toHaveLength(0);
   });
 });

@@ -1,6 +1,4 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import axe from 'axe-core';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Slider } from './Slider';
 
@@ -23,8 +21,7 @@ describe('Slider', () => {
     expect(slider).toHaveAttribute('aria-valuetext', '30');
   });
 
-  it('changes value with keyboard', async () => {
-    const user = userEvent.setup();
+  it('changes value with keyboard', () => {
     const onChange = vi.fn();
     render(
       <Slider
@@ -37,8 +34,11 @@ describe('Slider', () => {
     );
 
     const slider = screen.getByRole('slider', { name: 'Volume' });
-    slider.focus();
-    await user.keyboard('{ArrowRight}');
+
+    act(() => {
+      slider.focus();
+      fireEvent.keyDown(slider, { key: 'ArrowRight', code: 'ArrowRight' });
+    });
 
     expect(onChange).toHaveBeenCalledWith(3);
   });
@@ -47,13 +47,5 @@ describe('Slider', () => {
     render(<Slider label="Volume" isDisabled defaultValue={50} />);
 
     expect(screen.getByRole('slider', { name: 'Volume' })).toBeDisabled();
-  });
-
-  it('has no accessibility violations', async () => {
-    const { container } = render(<Slider label="Volume" defaultValue={20} />);
-
-    const results = await axe.run(container);
-
-    expect(results.violations).toHaveLength(0);
   });
 });

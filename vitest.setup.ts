@@ -5,7 +5,9 @@ import { afterEach } from 'vitest';
 const originalGetComputedStyle = window.getComputedStyle.bind(window);
 
 window.getComputedStyle = ((elt: Element, pseudoElt?: string | null) => {
-  const style = originalGetComputedStyle(elt, pseudoElt);
+  const style = pseudoElt
+    ? originalGetComputedStyle(elt)
+    : originalGetComputedStyle(elt, pseudoElt);
 
   return new Proxy(style, {
     get(target, prop, receiver) {

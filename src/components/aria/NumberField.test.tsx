@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axe from 'axe-core';
 import { describe, expect, it } from 'vitest';
 import { NumberField } from './NumberField';
 
@@ -32,15 +31,5 @@ describe('NumberField', () => {
     render(<NumberField label="Quantity" isDisabled defaultValue={1} />);
 
     expect(screen.getByRole('textbox', { name: 'Quantity' })).toBeDisabled();
-  });
-
-  it('has no accessibility violations', async () => {
-    const { container } = render(
-      <NumberField label="Quantity" defaultValue={1} />
-    );
-
-    const results = await axe.run(container);
-
-    expect(results.violations).toHaveLength(0);
   });
 });

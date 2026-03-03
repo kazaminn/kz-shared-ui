@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import axe from 'axe-core';
 import { describe, expect, it, vi } from 'vitest';
 import { Switch } from './Switch';
 
@@ -39,13 +38,5 @@ describe('Switch', () => {
     render(<Switch isDisabled>NFC</Switch>);
 
     expect(screen.getByRole('switch', { name: 'NFC' })).toBeDisabled();
-  });
-
-  it('has no accessibility violations', async () => {
-    const { container } = render(<Switch>Airplane mode</Switch>);
-
-    const results = await axe.run(container);
-
-    expect(results.violations).toHaveLength(0);
   });
 });

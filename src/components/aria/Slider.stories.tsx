@@ -17,7 +17,15 @@ export const Default: Story = {};
 export const WithLabel: Story = { args: { label: 'Volume' } };
 export const Disabled: Story = { args: { label: 'Volume', isDisabled: true } };
 export const Range: Story = {
-  render: () => <Slider label="Range" defaultValue={[20, 80]} minValue={0} maxValue={100} thumbLabels={['Minimum', 'Maximum']} />,
+  render: () => (
+    <Slider
+      label="Range"
+      defaultValue={[20, 80]}
+      minValue={0}
+      maxValue={100}
+      thumbLabels={['Minimum', 'Maximum']}
+    />
+  ),
 };
 
 export const AllVariants: Story = {
@@ -25,7 +33,11 @@ export const AllVariants: Story = {
     <div style={{ display: 'grid', gap: 20 }}>
       <Slider label="Default" defaultValue={40} />
       <Slider label="Disabled" defaultValue={40} isDisabled />
-      <Slider label="Range" defaultValue={[20, 80]} thumbLabels={['Minimum', 'Maximum']} />
+      <Slider
+        label="Range"
+        defaultValue={[20, 80]}
+        thumbLabels={['Minimum', 'Maximum']}
+      />
     </div>
   ),
 };

@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from './Button';
 
-const variants = ['primary', 'secondary', 'destructive', 'outline', 'quiet'] as const;
+const variants = [
+  'primary',
+  'secondary',
+  'destructive',
+  'outline',
+  'quiet',
+] as const;
 
 const meta = {
   component: Button,
@@ -26,17 +32,23 @@ export const AllVariants: Story = {
     <div style={{ display: 'grid', gap: 12 }}>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         {variants.map((variant) => (
-          <Button key={variant} variant={variant}>{variant}</Button>
+          <Button key={variant} variant={variant}>
+            {variant}
+          </Button>
         ))}
       </div>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         {variants.map((variant) => (
-          <Button key={`${variant}-disabled`} variant={variant} isDisabled>{variant} disabled</Button>
+          <Button key={`${variant}-disabled`} variant={variant} isDisabled>
+            {variant} disabled
+          </Button>
         ))}
       </div>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         {variants.map((variant) => (
-          <Button key={`${variant}-pending`} variant={variant} isPending>{variant} pending</Button>
+          <Button key={`${variant}-pending`} variant={variant} isPending>
+            {variant} pending
+          </Button>
         ))}
       </div>
     </div>

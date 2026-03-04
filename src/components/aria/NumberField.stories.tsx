@@ -20,7 +20,13 @@ export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 12 }}>
       <NumberField label="Default" defaultValue={2} />
-      <NumberField label="With min/max/step" defaultValue={2} minValue={0} maxValue={10} step={2} />
+      <NumberField
+        label="With min/max/step"
+        defaultValue={2}
+        minValue={0}
+        maxValue={10}
+        step={2}
+      />
       <NumberField label="Disabled" defaultValue={2} isDisabled />
     </div>
   ),

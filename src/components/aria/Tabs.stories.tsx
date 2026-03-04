@@ -8,7 +8,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const TabsExample = ({ disabledThird = false }: { disabledThird?: boolean }) => (
+const TabsExample = ({
+  disabledThird = false,
+}: {
+  disabledThird?: boolean;
+}) => (
   <Tabs>
     <TabList aria-label="Sections">
       <Tab id="overview">Overview</Tab>
@@ -27,7 +31,9 @@ const TabsExample = ({ disabledThird = false }: { disabledThird?: boolean }) => 
 
 export const Default: Story = { render: () => <TabsExample /> };
 export const WithPanels: Story = { render: () => <TabsExample /> };
-export const DisabledTab: Story = { render: () => <TabsExample disabledThird /> };
+export const DisabledTab: Story = {
+  render: () => <TabsExample disabledThird />,
+};
 
 export const AllVariants: Story = {
   render: () => (

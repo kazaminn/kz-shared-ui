@@ -1,2 +1,2 @@
 echo "[husky] pre-commit: running lint-staged"
-lint-staged --concurrent false
+npm run precommit

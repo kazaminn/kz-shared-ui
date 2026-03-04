@@ -4,14 +4,18 @@ on:
   pull_request:
     branches: [master]
 
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   quality:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
-    env:
-      VITE_API_BASE_URL: http://localhost:3000
+    # env:
+    #   VITE_API_BASE_URL: http://localhost:3000
 
     steps:
       - name: Checkout
@@ -26,48 +30,26 @@ jobs:
           node-version: '24.13.0'
           cache: 'npm'
 
+      - name: Cache Vitest
+        uses: actions/cache@v4
+        with:
+          path: .vitest
+          key: vitest-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Cache Playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}
+
       - name: Install dependencies
         run: npm ci
 
-      # ----------------------------
-      # Prettier (Claude branch only)
-      # ----------------------------
-      - name: Run Prettier (Claude only)
-        if: contains(github.head_ref, 'claude/') || contains(github.head_ref, 'codex/')
-        run: npm run format
-
-      - name: Commit formatted files (Claude only)
-        if: contains(github.head_ref, 'claude/') || contains(github.head_ref, 'codex/')
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git diff --cached --quiet || git commit -m "style: auto format Claude commit"
-          git push
-
-      # ----------------------------
-      # Commitlint
-      # ----------------------------
       - name: Commitlint
         run: |
           npx commitlint \
             --from=${{ github.event.pull_request.base.sha }} \
             --to=HEAD
 
-      # ----------------------------
-      # ESLint (no fix)
-      # ----------------------------
-      - name: ESLint
-        run: npm run lint:ci
-
-      # ----------------------------
-      # Unit Test
-      # ----------------------------
-      - name: Test
-        run: npm run test
-
-      # ----------------------------
-      # Storybook Test
-      # ----------------------------
-      - name: Storybook Test
-        run: npm run storybook:test
+      - name: Quality check (human)
+        run: npm run ci

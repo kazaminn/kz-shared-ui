@@ -17,4 +17,20 @@ describe('ColorArea', () => {
       screen.getByRole('slider', { name: /Saturation and brightness/i })
     ).toBeInTheDocument();
   });
+
+  it('reflects disabled state', () => {
+    render(
+      <ColorArea
+        aria-label="Saturation and brightness"
+        colorSpace="hsb"
+        xChannel="saturation"
+        yChannel="brightness"
+        isDisabled
+      />
+    );
+
+    expect(
+      screen.getByRole('slider', { name: /Saturation and brightness/i })
+    ).toBeDisabled();
+  });
 });

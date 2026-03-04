@@ -15,4 +15,18 @@ describe('ColorSlider', () => {
 
     expect(screen.getByRole('slider', { name: 'Hue' })).toBeInTheDocument();
   });
+
+  it('reflects disabled state', () => {
+    render(
+      <ColorSlider
+        label="Hue"
+        colorSpace="hsb"
+        channel="hue"
+        defaultValue="#ff0000"
+        isDisabled
+      />
+    );
+
+    expect(screen.getByRole('slider', { name: 'Hue' })).toBeDisabled();
+  });
 });

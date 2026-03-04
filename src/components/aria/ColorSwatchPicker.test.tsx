@@ -25,7 +25,10 @@ describe('ColorSwatchPicker', () => {
       </ColorSwatchPicker>
     );
 
+    const red = screen.getByRole('option', { name: 'Red' });
     const blue = screen.getByRole('option', { name: 'Blue' });
+
+    expect(red).toHaveAttribute('aria-selected', 'true');
     await user.click(blue);
 
     expect(blue).toHaveAttribute('aria-selected', 'true');

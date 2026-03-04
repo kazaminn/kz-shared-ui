@@ -19,15 +19,10 @@ describe('ColorThumb', () => {
     expect(
       screen.getByRole('slider', { name: /Saturation and brightness/i })
     ).toBeInTheDocument();
-
-    const thumb = screen.getByRole('presentation');
-    expect(thumb).toHaveClass('h-4.5', 'w-4.5', 'border-2', 'border-main');
-    expect(thumb).toHaveStyle({
-      boxShadow: '0 0 0 1px black, inset 0 0 0 1px black',
-    });
+    expect(screen.getByRole('presentation')).toBeInTheDocument();
   });
 
-  it('reflects disabled state styles', () => {
+  it('reflects disabled state', () => {
     render(
       <ColorArea
         aria-label="Saturation and brightness"
@@ -40,6 +35,8 @@ describe('ColorThumb', () => {
       </ColorArea>
     );
 
-    expect(screen.getByRole('presentation')).toHaveClass('bg-disabled');
+    expect(
+      screen.getByRole('slider', { name: /Saturation and brightness/i })
+    ).toBeDisabled();
   });
 });

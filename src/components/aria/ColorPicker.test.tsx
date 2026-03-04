@@ -22,4 +22,15 @@ describe('ColorPicker', () => {
 
     expect(screen.getByRole('textbox', { name: 'Hex' })).toBeInTheDocument();
   });
+
+  it('reflects default value', async () => {
+    const user = userEvent.setup();
+    render(<ColorPicker label="Color" defaultValue="#00ff00" />);
+
+    await user.click(screen.getByRole('button', { name: /Color$/i }));
+
+    expect(screen.getByRole('textbox', { name: 'Hex' })).toHaveDisplayValue(
+      /00ff00/i
+    );
+  });
 });

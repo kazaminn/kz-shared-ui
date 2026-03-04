@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import {
   Slider as AriaSlider,
   type SliderProps as AriaSliderProps,
@@ -56,6 +57,11 @@ export interface SliderProps<T> extends AriaSliderProps<T> {
   thumbLabels?: string[];
 }
 
+type SliderFillStyle = CSSProperties & {
+  '--size'?: string;
+  '--start'?: string;
+};
+
 export function Slider<T extends number | number[]>({
   label,
   thumbLabels,
@@ -84,8 +90,9 @@ export function Slider<T extends number | number[]>({
               <div
                 className={fillStyles(renderProps)}
                 style={
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  { '--size': state.getThumbPercent(0) * 100 + '%' } as any
+                  {
+                    '--size': state.getThumbPercent(0) * 100 + '%',
+                  } as SliderFillStyle
                 }
               />
             ) : state.values.length === 2 ? (
@@ -99,14 +106,13 @@ export function Slider<T extends number | number[]>({
                       (state.getThumbPercent(1) - state.getThumbPercent(0)) *
                         100 +
                       '%',
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  } as any
+                  } as SliderFillStyle
                 }
               />
             ) : null}
             {state.values.map((_, i) => (
               <SliderThumb
-                key={i}
+                key={state.getThumbValueLabel(i)}
                 index={i}
                 aria-label={thumbLabels?.[i]}
                 className={thumbStyles}

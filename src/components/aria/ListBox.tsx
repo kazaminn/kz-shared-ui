@@ -102,8 +102,7 @@ export function DropdownItem(props: ListBoxItemProps) {
 
 export interface DropdownSectionProps<T> extends SectionProps<T> {
   title?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  items?: any;
+  items?: Iterable<T>;
 }
 
 export function DropdownSection<T extends object>(

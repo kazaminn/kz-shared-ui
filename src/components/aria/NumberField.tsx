@@ -38,7 +38,7 @@ export function NumberField({
         'group flex flex-col gap-1 font-sans'
       )}
     >
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <FieldGroup>
         {(renderProps) => (
           <>
@@ -66,7 +66,7 @@ export function NumberField({
         )}
       </FieldGroup>
       {description && <Description>{description}</Description>}
-      <FieldError>{errorMessage}</FieldError>
+      {errorMessage && <FieldError>{errorMessage}</FieldError>}
     </AriaNumberField>
   );
 }

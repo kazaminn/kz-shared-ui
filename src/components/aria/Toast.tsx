@@ -6,40 +6,17 @@ import {
   UNSTABLE_Toast as Toast,
   UNSTABLE_ToastContent as ToastContent,
   type ToastProps,
-  UNSTABLE_ToastQueue as ToastQueue,
   UNSTABLE_ToastRegion as ToastRegion,
 } from 'react-aria-components';
-import { flushSync } from 'react-dom';
 import { composeProps } from '@/lib/tv';
 import './Toast.css';
-
-// Define the type for your toast content. This interface defines the properties of your toast content, affecting what you
-// pass to the queue calls as arguments.
-interface MyToastContent {
-  title: string;
-  description?: string;
-}
-
-// This is a global toast queue, to be imported and called where ever you want to queue a toast via queue.add().
-// eslint-disable-next-line react-refresh/only-export-components
-export const queue = new ToastQueue<MyToastContent>({
-  // Wrap state updates in a CSS view transition.
-  wrapUpdate(fn) {
-    if ('startViewTransition' in document) {
-      document.startViewTransition(() => {
-        flushSync(fn);
-      });
-    } else {
-      fn();
-    }
-  },
-});
+import { type ToastContent as MyToastContent, toastQueue } from './ToastQueue';
 
 export function MyToastRegion() {
   return (
     // The ToastRegion should be rendered at the root of your app.
     <ToastRegion
-      queue={queue}
+      queue={toastQueue}
       className="fixed right-4 bottom-4 flex flex-col-reverse gap-2 rounded-lg outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring focus-visible:outline-solid"
     >
       {({ toast }) => (

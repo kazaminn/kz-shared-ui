@@ -37,7 +37,7 @@ export function ColorField({
       {label && <Label>{label}</Label>}
       <Input className={inputStyles} />
       {description && <Description>{description}</Description>}
-      <FieldError>{errorMessage}</FieldError>
+      {errorMessage && <FieldError>{errorMessage}</FieldError>}
     </AriaColorField>
   );
 }

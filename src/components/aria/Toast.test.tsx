@@ -1,12 +1,13 @@
 import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
-import { MyToastRegion, queue } from './Toast';
+import { MyToastRegion } from './Toast';
+import { toastQueue } from './ToastQueue';
 
 describe('Toast', () => {
   afterEach(() => {
     act(() => {
-      queue.clear();
+      toastQueue.clear();
     });
   });
 
@@ -14,7 +15,7 @@ describe('Toast', () => {
     render(<MyToastRegion />);
 
     act(() => {
-      queue.add({ title: 'Saved successfully' });
+      toastQueue.add({ title: 'Saved successfully' });
     });
 
     const toast = await screen.findByRole('alert');
@@ -29,7 +30,7 @@ describe('Toast', () => {
     render(<MyToastRegion />);
 
     act(() => {
-      queue.add({ title: 'Closable toast' });
+      toastQueue.add({ title: 'Closable toast' });
     });
 
     const title = await screen.findByText('Closable toast');

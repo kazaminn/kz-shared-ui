@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { type VariantProps, createTV } from 'tailwind-variants';
 
@@ -28,6 +29,19 @@ export function composeProps<T>(
   }
 
   return twMerge(tw, className);
+}
+
+export function resolveRenderPropsChildren<
+  T extends { defaultChildren?: ReactNode },
+>(
+  children: ReactNode | ((renderProps: T) => ReactNode) | undefined,
+  renderProps: T
+): ReactNode {
+  if (typeof children === 'function') {
+    return children(renderProps);
+  }
+
+  return children ?? renderProps.defaultChildren;
 }
 
 export type { VariantProps };

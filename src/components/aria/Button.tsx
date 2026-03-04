@@ -3,7 +3,7 @@ import {
   Button as RACButton,
   type ButtonProps as RACButtonProps,
 } from 'react-aria-components';
-import { composeProps, tv } from '@/lib/tv';
+import { composeProps, resolveRenderPropsChildren, tv } from '@/lib/tv';
 import { focusRing } from '@/lib/variants';
 
 export interface ButtonProps extends RACButtonProps {
@@ -51,10 +51,7 @@ export function Button(props: ButtonProps) {
   const renderContent = (
     renderProps: ButtonRenderProps & { defaultChildren: React.ReactNode }
   ) => {
-    const resolved =
-      typeof children === 'function'
-        ? children(renderProps)
-        : (children ?? renderProps.defaultChildren);
+    const resolved = resolveRenderPropsChildren(children, renderProps);
 
     const showSpinner = renderProps.isPending;
 

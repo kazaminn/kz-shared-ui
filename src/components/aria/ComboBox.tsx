@@ -1,4 +1,3 @@
-'use client';
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
 import {
@@ -51,7 +50,7 @@ export function ComboBox<T extends object>({
         'group flex flex-col gap-1 font-sans'
       )}
     >
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <FieldGroup>
         <Input className="ps-3 pe-1" />
         <FieldButton className="mr-1 w-6 outline-offset-0">
@@ -59,7 +58,7 @@ export function ComboBox<T extends object>({
         </FieldButton>
       </FieldGroup>
       {description && <Description>{description}</Description>}
-      <FieldError>{errorMessage}</FieldError>
+      {errorMessage && <FieldError>{errorMessage}</FieldError>}
       <Popover className="w-(--trigger-width)">
         <ListBox
           items={items}

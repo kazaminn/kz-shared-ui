@@ -4,8 +4,8 @@ import {
   SliderOutput,
   SliderTrack,
 } from 'react-aria-components';
-import { Label } from '@/components/aria//Field';
 import { ColorThumb } from '@/components/aria/ColorThumb';
+import { Label } from '@/components/aria/Field';
 import { composeProps, tv } from '@/lib/tv';
 
 const trackStyles = tv({
@@ -34,7 +34,7 @@ export function ColorSlider({ label, ...props }: ColorSliderProps) {
         'grid-cols-[1fr_auto] flex-col items-center gap-2 font-sans orientation-horizontal:grid orientation-horizontal:w-56 orientation-vertical:flex'
       )}
     >
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <SliderOutput className="dark:text-subtle text-sm font-medium text-muted orientation-vertical:hidden" />
       <SliderTrack
         className={trackStyles}

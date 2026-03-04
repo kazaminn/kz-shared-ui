@@ -1,5 +1,3 @@
-'use client';
-import React from 'react';
 import {
   TextField as AriaTextField,
   type TextFieldProps as AriaTextFieldProps,
@@ -40,7 +38,7 @@ export function TextField({
       {label && <Label>{label}</Label>}
       <Input className={inputStyles} />
       {description && <Description>{description}</Description>}
-      <FieldError>{errorMessage}</FieldError>
+      {errorMessage && <FieldError>{errorMessage}</FieldError>}
     </AriaTextField>
   );
 }

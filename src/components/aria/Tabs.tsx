@@ -12,7 +12,7 @@ import {
   type TabRenderProps,
   type TabsProps,
 } from 'react-aria-components';
-import { composeProps, tv } from '@/lib/tv';
+import { composeProps, resolveRenderPropsChildren, tv } from '@/lib/tv';
 import { focusRing } from '@/lib/variants';
 
 const tabsStyles = tv({
@@ -69,10 +69,7 @@ export function Tab(props: TabProps) {
   const renderContent = (
     renderProps: TabRenderProps & { defaultChildren: React.ReactNode }
   ) => {
-    const resolved =
-      typeof children === 'function'
-        ? children(renderProps)
-        : (children ?? renderProps.defaultChildren);
+    const resolved = resolveRenderPropsChildren(children, renderProps);
 
     return (
       <>

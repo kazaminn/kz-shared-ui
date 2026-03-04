@@ -75,7 +75,7 @@ export function Slider<T extends number | number[]>({
         'grid-cols-[1fr_auto] flex-col items-center gap-2 font-sans orientation-horizontal:grid orientation-horizontal:w-64 orientation-horizontal:max-w-[calc(100%-10px)] orientation-vertical:flex'
       )}
     >
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <SliderOutput className="dark:text-subtle text-sm text-muted orientation-vertical:hidden">
         {({ state }) =>
           state.values.map((_, i) => state.getThumbValueLabel(i)).join(' – ')

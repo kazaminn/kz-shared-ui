@@ -1,5 +1,3 @@
-'use client';
-import React from 'react';
 import { SearchIcon, XIcon } from 'lucide-react';
 import {
   SearchField as AriaSearchField,
@@ -47,7 +45,7 @@ export function SearchField({
         </FieldButton>
       </FieldGroup>
       {description && <Description>{description}</Description>}
-      <FieldError>{errorMessage}</FieldError>
+      {errorMessage && <FieldError>{errorMessage}</FieldError>}
     </AriaSearchField>
   );
 }

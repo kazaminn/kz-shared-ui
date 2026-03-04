@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from './Button';
-import { MyToastRegion, queue } from './Toast';
+import { MyToastRegion } from './Toast';
+import { toastQueue } from './ToastQueue';
 
 const meta = {
   component: MyToastRegion,
@@ -14,7 +15,7 @@ function ToastDemo({ withDescription = false }: { withDescription?: boolean }) {
     <div style={{ minHeight: 220 }}>
       <Button
         onPress={() =>
-          queue.add({
+          toastQueue.add({
             title: 'Profile saved',
             description: withDescription
               ? 'Your changes are now live.'

@@ -1,4 +1,3 @@
-'use client';
 import React from 'react';
 import { Check } from 'lucide-react';
 import {
@@ -12,7 +11,7 @@ import {
   ListBoxSection,
   type SectionProps,
 } from 'react-aria-components';
-import { composeProps } from '@/lib/tv';
+import { composeProps, resolveRenderPropsChildren } from '@/lib/tv';
 import { dropdownItemStyles, itemStyles } from '@/lib/variants';
 
 type ListBoxProps<T> = Omit<AriaListBoxProps<T>, 'layout' | 'orientation'>;
@@ -43,10 +42,7 @@ export function ListBoxItem(props: ListBoxItemProps) {
   const renderContent = (
     renderProps: ListBoxItemRenderProps & { defaultChildren: React.ReactNode }
   ) => {
-    const resolved =
-      typeof children === 'function'
-        ? children(renderProps)
-        : (children ?? renderProps.defaultChildren);
+    const resolved = resolveRenderPropsChildren(children, renderProps);
 
     return (
       <>
@@ -72,10 +68,7 @@ export function DropdownItem(props: ListBoxItemProps) {
   const renderContent = (
     renderProps: ListBoxItemRenderProps & { defaultChildren: React.ReactNode }
   ) => {
-    const resolved =
-      typeof children === 'function'
-        ? children(renderProps)
-        : (children ?? renderProps.defaultChildren);
+    const resolved = resolveRenderPropsChildren(children, renderProps);
 
     return (
       <>

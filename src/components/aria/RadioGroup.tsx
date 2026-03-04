@@ -8,7 +8,7 @@ import {
   type ValidationResult,
 } from 'react-aria-components';
 import { Description, FieldError, Label } from '@/components/aria/Field';
-import { composeProps, tv } from '@/lib/tv';
+import { composeProps, resolveRenderPropsChildren, tv } from '@/lib/tv';
 import { focusRing } from '@/lib/variants';
 
 export interface RadioGroupProps extends Omit<RACRadioGroupProps, 'children'> {
@@ -27,12 +27,12 @@ export function RadioGroup(props: RadioGroupProps) {
         'group flex flex-col gap-2 font-sans'
       )}
     >
-      <Label>{props.label}</Label>
+      {props.label && <Label>{props.label}</Label>}
       <div className="flex gap-2 group-orientation-horizontal:gap-4 group-orientation-vertical:flex-col">
         {props.children}
       </div>
       {props.description && <Description>{props.description}</Description>}
-      <FieldError>{props.errorMessage}</FieldError>
+      {props.errorMessage && <FieldError>{props.errorMessage}</FieldError>}
     </RACRadioGroup>
   );
 }
@@ -61,10 +61,7 @@ export function Radio(props: RadioProps) {
   const renderContent = (
     renderProps: RadioRenderProps & { defaultChildren: React.ReactNode }
   ) => {
-    const resolved =
-      typeof children === 'function'
-        ? children(renderProps)
-        : (children ?? renderProps.defaultChildren);
+    const resolved = resolveRenderPropsChildren(children, renderProps);
 
     return (
       <>

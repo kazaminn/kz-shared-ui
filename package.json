@@ -6,26 +6,27 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "build": "tsc -b && vite build",
-    "test": "vitest --run",
-    "lint": "eslint .",
+    "build": "tsc -b && vite build --mode production",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:ci": "eslint .",
+    "test": "vitest --pass-with-no-tests --run --mode test",
+    "test:watch": "vitest --pass-with-no-tests --mode test",
+    "test:coverage": "vitest --pass-with-no-tests --run --mode test --coverage",
+    "test:related": "bash scripts/test-related.sh",
+    "ai:check": "npm run format && npm run lint:fix && npm run typecheck && npm run test:related",
+    "ci": "npm run format:check && npm run lint:ci && npm run typecheck && npm run test",
+    "check": "npm run ci",
     "prepare": "husky",
+    "precommit": "lint-staged --concurrent false",
     "storybook": "storybook dev -p 6006",
+    "storybook:test": "test-storybook",
     "build-storybook": "storybook build",
-    "chromatic": "chromatic"
-  },
-  "lint-staged": {
-    "*.{js,jsx}": [
-      "eslint --fix --no-warn-ignored",
-      "prettier --write"
-    ],
-    "*.{ts,tsx}": [
-      "eslint --fix --no-warn-ignored",
-      "prettier --write"
-    ],
-    "*.{json,md,css,yml}": "prettier --write"
+    "chromatic": "chromatic",
+    "setup:container": "bash scripts/setup-container.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -53,6 +54,7 @@
     "@storybook/addon-docs": "^10.2.10",
     "@storybook/addon-themes": "^10.2.10",
     "@storybook/react-vite": "^10.2.10",
+    "@storybook/test-runner": "^0.24.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

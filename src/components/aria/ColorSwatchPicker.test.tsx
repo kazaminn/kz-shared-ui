@@ -12,8 +12,8 @@ describe('ColorSwatchPicker', () => {
       </ColorSwatchPicker>
     );
 
-    expect(screen.getByRole('radio', { name: 'Red' })).toBeInTheDocument();
-    expect(screen.getByRole('radio', { name: 'Blue' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Red' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Blue' })).toBeInTheDocument();
   });
 
   it('changes selected option when clicked', async () => {
@@ -25,9 +25,9 @@ describe('ColorSwatchPicker', () => {
       </ColorSwatchPicker>
     );
 
-    const blue = screen.getByRole('radio', { name: 'Blue' });
+    const blue = screen.getByRole('option', { name: 'Blue' });
     await user.click(blue);
 
-    expect(blue).toHaveAttribute('aria-checked', 'true');
+    expect(blue).toHaveAttribute('aria-selected', 'true');
   });
 });

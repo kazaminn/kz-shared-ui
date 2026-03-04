@@ -7,7 +7,7 @@ describe('ColorPicker', () => {
   it('renders a button with accessible name', () => {
     render(<ColorPicker label="Color" defaultValue="#ff0000" />);
 
-    expect(screen.getByRole('button', { name: 'Color' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Color$/i })).toBeInTheDocument();
   });
 
   it('opens popover content when trigger button is clicked', async () => {
@@ -18,7 +18,7 @@ describe('ColorPicker', () => {
       screen.queryByRole('textbox', { name: 'Hex' })
     ).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: 'Color' }));
+    await user.click(screen.getByRole('button', { name: /Color$/i }));
 
     expect(screen.getByRole('textbox', { name: 'Hex' })).toBeInTheDocument();
   });

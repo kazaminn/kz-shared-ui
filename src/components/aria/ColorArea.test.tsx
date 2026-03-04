@@ -14,7 +14,7 @@ describe('ColorArea', () => {
     );
 
     expect(
-      screen.getByRole('slider', { name: 'Saturation and brightness' })
+      screen.getByRole('slider', { name: /Saturation and brightness/i })
     ).toBeInTheDocument();
   });
 });

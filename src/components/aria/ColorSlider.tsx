@@ -16,7 +16,7 @@ const trackStyles = tv({
       vertical: 'h-50 w-6',
     },
     isDisabled: {
-      true: 'bg-disabled dark:bg-surface forced-colors:bg-[GrayText]',
+      true: 'bg-disabled dark:bg-surface',
     },
   },
 });

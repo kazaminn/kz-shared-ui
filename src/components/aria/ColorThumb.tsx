@@ -11,10 +11,10 @@ const thumbStyles = tv({
       true: 'h-8 w-8',
     },
     isDragging: {
-      true: 'dark:bg-hover bg-surface forced-colors:bg-[ButtonBorder]',
+      true: 'dark:bg-hover bg-surface',
     },
     isDisabled: {
-      true: 'border-main bg-disabled dark:border-main dark:bg-surface forced-colors:border-[GrayText] forced-colors:bg-[GrayText]',
+      true: 'border-main bg-disabled dark:border-main dark:bg-surface',
     },
   },
 });

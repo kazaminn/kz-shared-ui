@@ -34,7 +34,7 @@ export function SearchField({
       <FieldGroup>
         <SearchIcon
           aria-hidden
-          className="dark:text-subtle ml-2 h-4 w-4 text-muted group-disabled:text-disabled dark:group-disabled:text-disabled forced-colors:text-[ButtonText] forced-colors:group-disabled:text-[GrayText]"
+          className="dark:text-subtle ml-2 h-4 w-4 text-muted group-disabled:text-disabled dark:group-disabled:text-disabled"
         />
         <Input
           placeholder={placeholder}

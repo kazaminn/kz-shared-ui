@@ -27,7 +27,7 @@ const button = tv({
         'hover:bg-hover pressed:bg-hover border-0 bg-transparent text-body',
     },
     isDisabled: {
-      true: 'border-transparent bg-disabled text-disabled forced-colors:text-[GrayText]',
+      true: 'border-transparent bg-disabled text-disabled',
     },
     isPending: {
       true: 'text-transparent',

@@ -5,7 +5,7 @@ import {
 import { tv } from '@/lib/tv';
 
 const styles = tv({
-  base: 'dark:bg-hover border-none bg-disabled forced-colors:bg-[ButtonBorder]',
+  base: 'dark:bg-hover border-none bg-disabled',
   variants: {
     orientation: {
       horizontal: 'h-px w-full',

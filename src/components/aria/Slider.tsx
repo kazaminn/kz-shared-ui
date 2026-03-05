@@ -18,8 +18,8 @@ const trackStyles = tv({
       vertical: 'ml-[50%] h-full w-1.5 -translate-x-[50%]',
     },
     isDisabled: {
-      false: 'bg-disabled dark:bg-surface forced-colors:bg-[ButtonBorder]',
-      true: 'bg-hover dark:bg-surface forced-colors:bg-[ButtonBorder]',
+      false: 'bg-disabled dark:bg-surface',
+      true: 'bg-hover dark:bg-surface',
     },
   },
 });
@@ -33,8 +33,8 @@ const fillStyles = tv({
         'bottom-(--start,0) ml-[50%] h-(--size) w-1.5 -translate-x-[50%]',
     },
     isDisabled: {
-      false: 'bg-primary forced-colors:bg-[Highlight]',
-      true: 'dark:bg-hover bg-disabled forced-colors:bg-[GrayText]',
+      false: 'bg-primary',
+      true: 'dark:bg-hover bg-disabled',
     },
   },
 });
@@ -44,10 +44,10 @@ const thumbStyles = tv({
   base: 'h-4.5 w-4.5 rounded-full border border-main bg-surface group-orientation-horizontal:mt-5 group-orientation-vertical:ml-2.5 dark:border-main dark:bg-base',
   variants: {
     isDragging: {
-      true: 'dark:bg-hover bg-surface forced-colors:bg-[ButtonBorder]',
+      true: 'dark:bg-hover bg-surface',
     },
     isDisabled: {
-      true: 'border-main dark:border-main forced-colors:border-[GrayText]',
+      true: 'border-main dark:border-main',
     },
   },
 });
@@ -112,7 +112,8 @@ export function Slider<T extends number | number[]>({
             ) : null}
             {state.values.map((_, i) => (
               <SliderThumb
-                key={state.getThumbValueLabel(i)}
+                // eslint-disable-next-line react/no-array-index-key
+                key={i}
                 index={i}
                 aria-label={thumbLabels?.[i]}
                 className={thumbStyles}

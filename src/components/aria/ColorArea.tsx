@@ -13,7 +13,7 @@ export function ColorArea(props: ColorAreaProps) {
       {...props}
       className={composeProps(
         props.className,
-        'aspect-square w-full max-w-56 rounded-lg bg-disabled dark:bg-surface forced-colors:bg-[GrayText]'
+        'aspect-square w-full max-w-56 rounded-lg bg-disabled dark:bg-surface'
       )}
       style={({ defaultStyle, isDisabled }) => ({
         ...defaultStyle,

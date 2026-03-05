@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ChevronDown } from 'lucide-react';
 import {
   ComboBox as AriaComboBox,
   type ComboBoxProps as AriaComboBoxProps,
+  ComboBoxStateContext,
   ListBox,
   type ListBoxItemProps,
   type ValidationResult,
@@ -42,6 +43,9 @@ export function ComboBox<T extends object>({
   items,
   ...props
 }: ComboBoxProps<T>) {
+  const state = useContext(ComboBoxStateContext);
+  const isSelected = state?.selectedKey != null;
+
   return (
     <AriaComboBox
       {...props}
@@ -52,7 +56,10 @@ export function ComboBox<T extends object>({
     >
       {label && <Label>{label}</Label>}
       <FieldGroup>
-        <Input className="ps-3 pe-1" />
+        <Input
+          data-selected={isSelected || undefined}
+          className="data-[selected]:text-heading selected:text-heading ps-3 pe-1"
+        />
         <FieldButton className="mr-1 w-6 outline-offset-0">
           <ChevronDown aria-hidden className="h-4 w-4" />
         </FieldButton>

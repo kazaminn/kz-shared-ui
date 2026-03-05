@@ -47,7 +47,7 @@ export function ListBoxItem(props: ListBoxItemProps) {
     return (
       <>
         {resolved}
-        <div className="absolute right-4 bottom-0 left-4 hidden h-px bg-base/20 forced-colors:bg-[HighlightText] [.group[data-selected]:has(+[data-selected])_&]:block" />
+        <div className="absolute right-4 bottom-0 left-4 hidden h-px bg-base/20 [.group[data-selected]:has(+[data-selected])_&]:block" />
       </>
     );
   };

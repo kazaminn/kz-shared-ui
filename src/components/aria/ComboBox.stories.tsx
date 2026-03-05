@@ -1,24 +1,37 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ComboBox, ComboBoxItem, ComboBoxSection } from './ComboBox';
+import {
+  ComboBox,
+  ComboBoxItem,
+  type ComboBoxProps,
+  ComboBoxSection,
+} from './ComboBox';
 
-const people = [
+interface Person {
+  id: string;
+  name: string;
+}
+
+const people: Person[] = [
   { id: 'ada', name: 'Ada Lovelace' },
   { id: 'grace', name: 'Grace Hopper' },
   { id: 'katherine', name: 'Katherine Johnson' },
 ];
 
+type PeopleComboBoxProps = Omit<ComboBoxProps<Person>, 'children'>;
+
+const PeopleComboBox = (args: PeopleComboBoxProps) => (
+  <ComboBox<Person> {...args}>
+    {(item) => <ComboBoxItem>{item.name}</ComboBoxItem>}
+  </ComboBox>
+);
+
 const meta = {
-  component: ComboBox,
+  component: PeopleComboBox,
   args: {
     label: 'Assignee',
     defaultItems: people,
   },
-  render: (args) => (
-    <ComboBox {...args}>
-      {(item) => <ComboBoxItem>{item.name}</ComboBoxItem>}
-    </ComboBox>
-  ),
-} satisfies Meta<typeof ComboBox>;
+} satisfies Meta<typeof PeopleComboBox>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -27,7 +40,7 @@ export const Default: Story = {};
 
 export const WithSections: Story = {
   render: () => (
-    <ComboBox label="Assignee" defaultItems={people}>
+    <ComboBox<Person> label="Assignee" defaultItems={people}>
       <ComboBoxSection title="Team A" items={people.slice(0, 2)}>
         {(item) => <ComboBoxItem>{item.name}</ComboBoxItem>}
       </ComboBoxSection>
@@ -47,10 +60,8 @@ export const Disabled: Story = {
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 16, maxWidth: 320 }}>
-      <ComboBox label="Default" defaultItems={people}>
-        {(item) => <ComboBoxItem>{item.name}</ComboBoxItem>}
-      </ComboBox>
-      <ComboBox label="With sections" defaultItems={people}>
+      <PeopleComboBox label="Default" defaultItems={people} />
+      <ComboBox<Person> label="With sections" defaultItems={people}>
         <ComboBoxSection title="Team A" items={people.slice(0, 2)}>
           {(item) => <ComboBoxItem>{item.name}</ComboBoxItem>}
         </ComboBoxSection>
@@ -58,9 +69,7 @@ export const AllVariants: Story = {
           {(item) => <ComboBoxItem>{item.name}</ComboBoxItem>}
         </ComboBoxSection>
       </ComboBox>
-      <ComboBox label="Disabled" defaultItems={people} isDisabled>
-        {(item) => <ComboBoxItem>{item.name}</ComboBoxItem>}
-      </ComboBox>
+      <PeopleComboBox label="Disabled" defaultItems={people} isDisabled />
     </div>
   ),
 };

@@ -51,7 +51,7 @@ export function MyToast(props: ToastProps<MyToastContent>) {
       style={{ viewTransitionName: props.toast.key } as CSSProperties}
       className={composeProps(
         props.className,
-        'flex w-57.5 items-center gap-4 rounded-lg bg-primary px-4 py-3 font-sans outline-none [view-transition-class:toast] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring focus-visible:outline-solid forced-colors:outline'
+        'flex w-57.5 items-center gap-4 rounded-lg bg-primary px-4 py-3 font-sans outline-none [view-transition-class:toast] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring focus-visible:outline-solid'
       )}
     />
   );

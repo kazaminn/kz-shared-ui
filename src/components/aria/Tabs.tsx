@@ -4,7 +4,6 @@ import {
   TabPanel as RACTabPanel,
   TabPanels as RACTabPanels,
   Tabs as RACTabs,
-  SelectionIndicator,
   type TabListProps,
   type TabPanelProps,
   type TabPanelsProps,
@@ -16,12 +15,15 @@ import { composeProps, resolveRenderPropsChildren, tv } from '@/lib/tv';
 import { focusRing } from '@/lib/variants';
 
 const tabsStyles = tv({
-  base: 'flex max-w-full gap-4 font-sans',
+  base: 'flex w-full max-w-full gap-4 font-sans',
   variants: {
     orientation: {
       horizontal: 'flex-col',
       vertical: 'flex-row',
     },
+  },
+  defaultVariants: {
+    orientation: 'horizontal',
   },
 });
 
@@ -29,18 +31,23 @@ export function Tabs(props: TabsProps) {
   return (
     <RACTabs
       {...props}
-      className={composeProps(props.className, tabsStyles())}
+      className={composeProps(props.className, ({ orientation }) =>
+        tabsStyles({ orientation })
+      )}
     />
   );
 }
 
 const tabListStyles = tv({
-  base: '-m-1 flex max-w-full overflow-x-auto overflow-y-clip p-1 [scrollbar-width:none]',
+  base: 'relative flex w-full max-w-full overflow-x-auto overflow-y-clip [scrollbar-width:none]',
   variants: {
     orientation: {
-      horizontal: 'flex-row',
-      vertical: 'flex-col items-start',
+      horizontal: 'flex-row items-end gap-2 border-b border-main/30',
+      vertical: 'flex-col items-start gap-1 border-r border-main/15 pr-1',
     },
+  },
+  defaultVariants: {
+    orientation: 'horizontal',
   },
 });
 
@@ -48,17 +55,23 @@ export function TabList<T extends object>(props: TabListProps<T>) {
   return (
     <RACTabList
       {...props}
-      className={composeProps(props.className, tabListStyles())}
+      className={composeProps(props.className, ({ orientation }) =>
+        tabListStyles({ orientation })
+      )}
     />
   );
 }
 
 const tabProps = tv({
   extend: focusRing,
-  base: 'group relative flex cursor-default items-center rounded-full px-3 py-1.5 text-sm font-medium transition forced-color-adjust-none [-webkit-tap-highlight-color:transparent]',
+  base: 'group transition-colors[-webkit-tap-highlight-color:transparent] relative flex cursor-default items-center px-5 py-3 text-lg font-medium',
   variants: {
+    isSelected: {
+      false: 'text-body',
+      true: 'text-heading',
+    },
     isDisabled: {
-      true: 'selected:bg-selected dark:selected:bg-selected text-disabled dark:text-disabled forced-colors:text-[GrayText] selected:text-white dark:selected:text-muted forced-colors:selected:bg-[GrayText] forced-colors:selected:text-[HighlightText]',
+      true: 'text-disabled',
     },
   },
 });
@@ -74,13 +87,24 @@ export function Tab(props: TabProps) {
     return (
       <>
         {resolved}
-        <SelectionIndicator className="group-disabled:dark:bg-hover absolute top-0 left-0 z-10 h-full w-full rounded-full bg-base mix-blend-difference group-disabled:-z-1 group-disabled:bg-disabled group-disabled:mix-blend-normal motion-safe:transition-[translate,width,height]" />
+        {renderProps.isSelected && (
+          <span className="absolute right-2 -bottom-px left-2 z-10 h-1 rounded-full bg-primary group-disabled:bg-disabled" />
+        )}
       </>
     );
   };
 
   return (
-    <RACTab {...rest} className={composeProps(props.className, tabProps())}>
+    <RACTab
+      {...rest}
+      className={composeProps(props.className, (renderProps) =>
+        tabProps({
+          isFocusVisible: renderProps.isFocusVisible,
+          isSelected: renderProps.isSelected,
+          isDisabled: renderProps.isDisabled,
+        })
+      )}
+    >
       {renderContent}
     </RACTab>
   );

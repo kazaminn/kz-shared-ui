@@ -22,7 +22,7 @@ const chevron = tv({
       true: 'rotate-90 transform',
     },
     isDisabled: {
-      true: 'text-disabled dark:text-disabled forced-colors:text-[GrayText]',
+      true: 'text-disabled dark:text-disabled',
     },
   },
 });

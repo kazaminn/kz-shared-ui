@@ -39,10 +39,7 @@ export function FieldError(props: FieldErrorProps) {
   return (
     <RACFieldError
       {...props}
-      className={composeProps(
-        props.className,
-        'text-sm text-danger forced-colors:text-[Mark]'
-      )}
+      className={composeProps(props.className, 'text-sm text-danger')}
     />
   );
 }

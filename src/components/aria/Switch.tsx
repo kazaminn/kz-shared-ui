@@ -15,9 +15,8 @@ const track = tv({
   base: 'box-border flex h-5 w-9 shrink-0 cursor-default items-center rounded-full border border-transparent px-px font-sans shadow-inner transition duration-200 ease-in-out',
   variants: {
     isSelected: {
-      false:
-        'bg-hover group-pressed:bg-hover dark:group-pressed:bg-hover border-main dark:border-main dark:bg-surface',
-      true: 'dark:bg-hover dark:group-pressed:bg-hover bg-surface group-pressed:bg-surface forced-colors:bg-[Highlight]!',
+      false: 'group-pressed:bg-hover border-main bg-surface dark:bg-surface',
+      true: 'bg-primary group-pressed:bg-primary forced-colors:bg-[Highlight]!',
     },
     isDisabled: {
       true: 'bg-hover dark:group-selected:bg-selected border-main group-selected:bg-disabled dark:border-main dark:bg-surface forced-colors:border-[GrayText] forced-colors:group-selected:bg-[GrayText]!',
@@ -56,7 +55,7 @@ export function Switch({ children, ...props }: SwitchProps) {
       {...props}
       className={composeProps(
         props.className,
-        'group relative flex items-center gap-2 text-sm text-body transition [-webkit-tap-highlight-color:transparent] disabled:text-disabled dark:text-body dark:disabled:text-disabled forced-colors:disabled:text-[GrayText]'
+        'group relative flex items-center gap-2 text-sm text-body transition [-webkit-tap-highlight-color:transparent] disabled:text-disabled forced-colors:disabled:text-[GrayText]'
       )}
     >
       {(renderProps) => (

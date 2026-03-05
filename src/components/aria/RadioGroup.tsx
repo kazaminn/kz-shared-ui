@@ -42,12 +42,11 @@ const styles = tv({
   base: 'box-border h-4.5 w-4.5 rounded-full border bg-base transition-all dark:bg-base',
   variants: {
     isSelected: {
-      false:
-        'border-main group-pressed:border-main dark:border-main dark:group-pressed:border-main',
-      true: 'border-[calc(var(--spacing)*1.5)] border-main group-pressed:border-main dark:border-main dark:group-pressed:border-main forced-colors:border-[Highlight]!',
+      false: 'border-main group-pressed:border-main',
+      true: 'border-[calc(var(--spacing)*1.5)] border-primary group-pressed:border-primary forced-colors:border-[Highlight]!',
     },
     isInvalid: {
-      true: 'border-danger group-pressed:border-danger dark:border-danger dark:group-pressed:border-danger forced-colors:border-[Mark]!',
+      true: 'border-danger group-pressed:border-danger forced-colors:border-[Mark]!',
     },
     isDisabled: {
       true: 'border-main dark:border-main forced-colors:border-[GrayText]!',
@@ -76,7 +75,7 @@ export function Radio(props: RadioProps) {
       {...rest}
       className={composeProps(
         props.className,
-        'group relative flex items-center gap-2 text-sm text-body transition [-webkit-tap-highlight-color:transparent] disabled:text-disabled dark:text-body dark:disabled:text-disabled forced-colors:disabled:text-[GrayText]'
+        'group relative flex items-center gap-2 text-sm text-body transition [-webkit-tap-highlight-color:transparent] disabled:text-disabled forced-colors:disabled:text-[GrayText]'
       )}
     >
       {renderContent}
